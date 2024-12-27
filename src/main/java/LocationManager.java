@@ -4,6 +4,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+
+
 public class LocationManager {
 
     int busRouteID;
@@ -13,11 +18,10 @@ public class LocationManager {
     double travelCost;
 
     Scanner input = new Scanner(System.in);
-   // LocationManager location = new LocationManager();
+    // LocationManager location = new LocationManager();
 
 
-
-    public void gettingLocations(){
+    public String gettingLocations() {
         System.out.print("Enter Bus Route ID: ");
         int routeID = input.nextInt();
         input.nextLine();
@@ -26,23 +30,25 @@ public class LocationManager {
         String startingPoint = input.nextLine();
         System.out.print("Enter Ending Location: ");
         String endingPoint = input.nextLine();
-      //  return (startingPoint +" "+ endingPoint);
+        return (startingPoint + " " + endingPoint);
 
-        calculateTravelDistance_Time(startingPoint,endingPoint);
+        // calculateTravelDistance_Time(startingPoint,endingPoint);
 
     }
 
 
-    public void calculateTravelDistance_Time(String start,String end){
+    public void getTravelDistanceTime() {
         try {
             // Create HttpClient
             HttpClient client = HttpClient.newHttpClient();
 
+            String[] n = gettingLocations().split(" ");
+
             // Build the GET request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
-                            "origins="+start+"&" +
-                            "destinations="+end+"&" +
+                            "origins=" + n[0] + "&" +
+                            "destinations=" + n[1] + "&" +
                             "key=AIzaSyBCQYvM4XOxbImK4pxXZqK8tSawEemlh1Q"))
                     .GET()
                     .build();

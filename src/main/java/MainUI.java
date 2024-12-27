@@ -4,7 +4,7 @@ public class MainUI {
     public static void main(String[] args) {
         MainUI UI = new MainUI();
         LocationManager location = new LocationManager();
-        Scanner input =new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
 
         System.out.println("---Welcome to Bus Tikka---");
         UI.loginProcess();
@@ -12,24 +12,24 @@ public class MainUI {
 
         switch (inputNumber) {
             case 1:
-               // break;
+                // break;
             case 2:
-               // break;
+                // break;
             default:
                 System.out.println("Invalid Input");
 
         }
 
-    //    location.callAPI();
+        //    location.callAPI();
 
         UI.showMainMenu();
         int inputMenuNumber = input.nextInt();
 
         switch (inputMenuNumber) {
             case 1:
-                location.gettingLocations();
+                location.getTravelDistanceTime();
 
-                 break;
+                break;
             case 2:
                 // break;
             case 3:
@@ -46,7 +46,6 @@ public class MainUI {
         }
 
 
-
     }
 
     private void showMainMenu() {
@@ -59,7 +58,7 @@ public class MainUI {
         System.out.println("        6) Quit");
     }
 
-    private  void loginProcess(){
+    private void loginProcess() {
         System.out.println("1) Register");
         System.out.println("2) Login");
     }
