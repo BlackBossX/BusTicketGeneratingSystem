@@ -1,4 +1,3 @@
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -39,7 +38,7 @@ public class LocationManager {
     }
 
 
-    public void getTravelDistanceTime() {
+    public String getTravelDistanceTime() {
         try {
             // Create HttpClient
             HttpClient client = HttpClient.newHttpClient();
@@ -76,10 +75,13 @@ public class LocationManager {
             System.out.println("Distance: "+distance);
             System.out.println("Duration: "+duration);
 
+            return n[0]+" "+n[1]+" "+distance+" "+duration;
+
           //System.out.println("Response Code: " + response.statusCode());
           //System.out.println("Response Body: " + response.body());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
 }

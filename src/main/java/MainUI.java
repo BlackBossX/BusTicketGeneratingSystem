@@ -4,6 +4,7 @@ public class MainUI {
     public static void main(String[] args) {
         MainUI UI = new MainUI();
         LocationManager location = new LocationManager();
+        TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
 
         System.out.println("---Welcome to Bus Tikka---");
@@ -27,7 +28,8 @@ public class MainUI {
 
         switch (inputMenuNumber) {
             case 1:
-                location.getTravelDistanceTime();
+               // location.getTravelDistanceTime();
+                generateTicket.generateQR();
 
                 break;
             case 2:
