@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,7 +19,8 @@ public class LocationManager {
     double travelCost;
 
     Scanner input = new Scanner(System.in);
-    // LocationManager location = new LocationManager();
+
+   // JSONArray arry = new JSONArray()
 
 
     public String gettingLocations() {
@@ -56,9 +58,26 @@ public class LocationManager {
             // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Print the response
-            System.out.println("Response Code: " + response.statusCode());
-            System.out.println("Response Body: " + response.body());
+            JSONObject jsonObject = new JSONObject(response.body());
+
+            // starting with [] mean its JSONArray and starting with {} mean its JSONObject
+
+            JSONArray rowsArray = jsonObject.getJSONArray("rows");
+            JSONObject rows0 = rowsArray.getJSONObject(0);
+            JSONArray elements = rows0.getJSONArray("elements");
+            JSONObject elements0 = elements.getJSONObject(0);
+            JSONObject distanceObj = elements0.getJSONObject("distance");
+            String distance = distanceObj.getString("text");
+
+            JSONObject durationObj = elements0.getJSONObject("duration");
+            String duration = durationObj.getString("text");
+
+            System.out.println(n[0]+" -> "+n[1]);
+            System.out.println("Distance: "+distance);
+            System.out.println("Duration: "+duration);
+
+          //System.out.println("Response Code: " + response.statusCode());
+          //System.out.println("Response Body: " + response.body());
         } catch (Exception e) {
             e.printStackTrace();
         }
