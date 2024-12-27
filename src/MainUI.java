@@ -1,10 +1,12 @@
 import java.util.Scanner;
+
 public class MainUI {
     public static void main(String[] args) {
         MainUI UI = new MainUI();
+        LocationManager location = new LocationManager();
         Scanner input =new Scanner(System.in);
 
-        System.out.println("---Welcome to BusTikka---");
+        System.out.println("---Welcome to Bus Tikka---");
         UI.loginProcess();
         int inputNumber = input.nextInt();
 
