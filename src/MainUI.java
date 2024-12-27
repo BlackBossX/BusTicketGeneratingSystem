@@ -20,12 +20,16 @@ public class MainUI {
 
         }
 
+    //    location.callAPI();
+
         UI.showMainMenu();
         int inputMenuNumber = input.nextInt();
 
         switch (inputMenuNumber) {
             case 1:
-                // break;
+                location.gettingLocations();
+
+                 break;
             case 2:
                 // break;
             case 3:
