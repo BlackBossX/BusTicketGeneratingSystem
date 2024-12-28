@@ -9,20 +9,26 @@ public class TicketGenerator {
 
 
     public void generateQR() {
-        String locationData = locationInfo.getTravelDistanceTime();
 
-        String name1 = "Malan";
-        String name2 = "Alwis";
-        String ticketID = "TB10000";
-        String[] splitLocation = locationData.split(" ");
+        try {
+            String locationData = locationInfo.getTravelDistanceTime();
 
-        String encodedURL = encodeURL(name1, name2, ticketID,
-                splitLocation[0], splitLocation[1], splitLocation[2],
-                splitLocation[3], splitLocation[4], splitLocation[5]);
+            String name1 = "Malan";
+            String name2 = "Alwis";
+            String ticketID = "TB10000";
+            String[] splitLocation = locationData.split(" ");
+
+            String encodedURL = encodeURL(name1, name2, ticketID,
+                    splitLocation[0], splitLocation[1], splitLocation[2],
+                    splitLocation[3], splitLocation[4], splitLocation[5]);
 
 
-        String URL = "http://api.qrserver.com/v1/create-qr-code/?data=" + encodedURL + "&size=300x300";
-        System.out.println("Your Ticket QR code here: " + URL);
+            String URL = "http://api.qrserver.com/v1/create-qr-code/?data=" + encodedURL + "&size=300x300";
+            System.out.println("Your Ticket QR code here: " + URL);
+        }catch (Exception e){
+            System.out.println("Can't Generate QR!");
+        }
+
 
     }
 

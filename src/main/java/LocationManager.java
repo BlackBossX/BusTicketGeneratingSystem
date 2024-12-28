@@ -56,6 +56,8 @@ public class LocationManager {
             // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+           // System.out.println("Response Body: " + response.body());
+
             JSONObject jsonObject = new JSONObject(response.body());
 
             // starting with [] mean its JSONArray and starting with {} mean its JSONObject
@@ -67,19 +69,23 @@ public class LocationManager {
             JSONObject distanceObj = elements0.getJSONObject("distance");
             String distance = distanceObj.getString("text");
 
+            String status = elements0.getString("status");
+
             JSONObject durationObj = elements0.getJSONObject("duration");
             String duration = durationObj.getString("text");
 
             System.out.println(n[0] + " -> " + n[1]);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
+         //   System.out.println("status: " + status);
+
 
             return n[0] + " " + n[1] + " " + distance + " " + duration;
 
             //System.out.println("Response Code: " + response.statusCode());
-            //System.out.println("Response Body: " + response.body());
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
+            System.out.println("Type Locations Correctly!");
         }
         return "";
     }
