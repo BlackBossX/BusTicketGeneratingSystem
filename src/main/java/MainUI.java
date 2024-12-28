@@ -28,7 +28,7 @@ public class MainUI {
 
         switch (inputMenuNumber) {
             case 1:
-               // location.getTravelDistanceTime();
+                // location.getTravelDistanceTime();
                 generateTicket.generateQR();
 
                 break;

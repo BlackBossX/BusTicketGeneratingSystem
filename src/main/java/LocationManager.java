@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-
 public class LocationManager {
 
     int busRouteID;
@@ -19,7 +18,7 @@ public class LocationManager {
 
     Scanner input = new Scanner(System.in);
 
-   // JSONArray arry = new JSONArray()
+    // JSONArray arry = new JSONArray()
 
 
     public String gettingLocations() {
@@ -71,14 +70,14 @@ public class LocationManager {
             JSONObject durationObj = elements0.getJSONObject("duration");
             String duration = durationObj.getString("text");
 
-            System.out.println(n[0]+" -> "+n[1]);
-            System.out.println("Distance: "+distance);
-            System.out.println("Duration: "+duration);
+            System.out.println(n[0] + " -> " + n[1]);
+            System.out.println("Distance: " + distance);
+            System.out.println("Duration: " + duration);
 
-            return n[0]+" "+n[1]+" "+distance+" "+duration;
+            return n[0] + " " + n[1] + " " + distance + " " + duration;
 
-          //System.out.println("Response Code: " + response.statusCode());
-          //System.out.println("Response Body: " + response.body());
+            //System.out.println("Response Code: " + response.statusCode());
+            //System.out.println("Response Body: " + response.body());
         } catch (Exception e) {
             e.printStackTrace();
         }
