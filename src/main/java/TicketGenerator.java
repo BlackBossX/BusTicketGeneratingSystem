@@ -25,8 +25,10 @@ public class TicketGenerator {
 
             String URL = "http://api.qrserver.com/v1/create-qr-code/?data=" + encodedURL + "&size=300x300";
             System.out.println("Your Ticket QR code here: " + URL);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Can't Generate QR!");
+            System.out.println(" ");
+            generateQR();
         }
 
 
