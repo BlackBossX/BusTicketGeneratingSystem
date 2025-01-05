@@ -1,12 +1,24 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class StorageManager {
-    public static void main(String []args) {
+
+    public void connectionSetup(){
+        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
+        String username = "root";
+        String password = "2419624196";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Connected to the database!");
+        } catch (SQLException e) {
+            System.out.println("Failed to connect to the database!");
+            e.printStackTrace();
+        }
+    }
+
+    public void dataInsert(){
         String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
         String username = "root";
         String password = "2419624196";
@@ -26,9 +38,14 @@ public class StorageManager {
 
             System.out.println("Data inserted successfully!");
         } catch (Exception e) {
+            System.out.println("Oops Something Wrong!");
             e.printStackTrace();
         }
     }
 
 }
+
+
+
+
 

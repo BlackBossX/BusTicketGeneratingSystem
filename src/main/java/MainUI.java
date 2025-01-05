@@ -6,6 +6,7 @@ public class MainUI {
         LocationManager location = new LocationManager();
         TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
+        StorageManager storage = new StorageManager();
 
         System.out.println("---Welcome to Bus Tikka---");
         UI.loginProcess();
@@ -34,7 +35,8 @@ public class MainUI {
                 generateTicket.generateQR();
                 break;
             case 3:
-                // break;
+                storage.connectionSetup();
+                break;
             case 4:
                 // break;
             case 5:
