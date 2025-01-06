@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class LocationManager {
 
-    String tripID;
+    int tripID;
     String startingLocation;
     String endingLocation;
     double travelDistance;
@@ -23,14 +23,14 @@ public class LocationManager {
 
     public String gettingLocations() {
         System.out.print("Enter Bus Route ID: ");
-        int routeID = input.nextInt();
+        tripID = input.nextInt();
         input.nextLine();
 
         System.out.print("Enter Starting Location: ");
-        String startingPoint = input.nextLine();
+        startingLocation = input.nextLine();
         System.out.print("Enter Ending Location: ");
-        String endingPoint = input.nextLine();
-        return (startingPoint + " " + endingPoint);
+        endingLocation = input.nextLine();
+        return (startingLocation + " " + endingLocation);
 
         // calculateTravelDistance_Time(startingPoint,endingPoint);
 
