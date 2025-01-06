@@ -5,6 +5,9 @@ import java.sql.SQLException;
 
 public class StorageManager {
 
+
+
+
     public void connectionSetup(){
         String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
         String username = "root";
@@ -18,21 +21,30 @@ public class StorageManager {
         }
     }
 
-    public void dataInsert(){
+
+
+
+
+    public void dataInsert(int userID,String name,String email,String pass,String mobile){
         String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
         String username = "root";
         String password = "2419624196";
 
+        // Generate the next user ID
+        String prefix = "U";
+        String customUserId = prefix + String.format("%04d", userID); // Output: U001, U002, ...
 
-        String sql = "INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)";;
+
+        String sql = "INSERT INTO users (user_id, name, email, password, phone) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, "Malan De Alwis");
-            statement.setString(2, "malandealwis@gmail.com");
-            statement.setString(3, "12345678");
-            statement.setString(4, "0757292396");
+            statement.setString(1,customUserId);
+            statement.setString(2, name);
+            statement.setString(3, email);
+            statement.setString(4, pass);
+            statement.setString(5, mobile);
 
             statement.executeUpdate();
 
@@ -42,6 +54,10 @@ public class StorageManager {
             e.printStackTrace();
         }
     }
+
+
+
+
 
 }
 

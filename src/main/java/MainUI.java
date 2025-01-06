@@ -7,6 +7,14 @@ public class MainUI {
         TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
         StorageManager storage = new StorageManager();
+        UserManager user1 = new UserManager(1,"Malan",
+                "malandealwis@gamil.com","24196","0712832025");
+
+        UserManager user2 = new UserManager(2,"Dilhara",
+                "dilharabandara@gamil.com","1234","0718697687");
+
+
+
 
         System.out.println("---Welcome to Bus Tikka---");
         UI.loginProcess();
@@ -14,7 +22,8 @@ public class MainUI {
 
         switch (inputNumber) {
             case 1:
-                // break;
+                System.out.println("User Details: "+user1.getUserInfo().split(" ")[1]);
+                break;
             case 2:
                 // break;
             default:
@@ -38,7 +47,9 @@ public class MainUI {
                 storage.connectionSetup();
                 break;
             case 4:
-                // break;
+                storage.dataInsert(user1.userID,user1.name, user1.email, user1.password, user1.mobileNo);
+                storage.dataInsert(user2.userID,user2.name, user2.email, user2.password, user2.mobileNo);
+                break;
             case 5:
                 // break;
             case 6:

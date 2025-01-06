@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class LocationManager {
 
-    int busRouteID;
+    String tripID;
     String startingLocation;
     String endingLocation;
     double travelDistance;
@@ -49,7 +49,7 @@ public class LocationManager {
                     .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
                             "origins=" + n[0] + "&" +
                             "destinations=" + n[1] + "&" +
-                            "key=AIzaSyBCQYvM4XOxbImK4pxXZqK8tSawEemlh1Q"))
+                            "key=AIzaSyASImPQNkxyWnMrFZ7hEDgx-szlLkeEPHk"))
                     .GET()
                     .build();
 
