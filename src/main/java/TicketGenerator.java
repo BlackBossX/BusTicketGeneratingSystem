@@ -42,7 +42,7 @@ public class TicketGenerator {
                     "Name: " + fName + lName + "\n\n" +
                     "Travel Route: " + startLocation + " -> " + endLocation + "\n" +
                     "Distance: " + distance + "\n" +
-                    "Duration: " + duration ;
+                    "Duration: " + duration;
 
             // Encode the string for use in a URL
             String encodedData = URLEncoder.encode(data, "UTF-8");
@@ -54,11 +54,11 @@ public class TicketGenerator {
         return "";
     }
 
-    public static String encodeURL(String location){
+    public static String encodeURL(String location) {
         try {
-            String encodedData = URLEncoder.encode(location,"UTF-8");
+            String encodedData = URLEncoder.encode(location, "UTF-8");
             return encodedData;
-        }catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return "";

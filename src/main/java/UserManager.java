@@ -1,16 +1,16 @@
-import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+
 public class UserManager {
     String name;
     String email;
     String password;
     String mobileNo;
 
-    UserManager(){
+    UserManager() {
 
     }
 
-    UserManager(String name,String email,String password,String mobileNo){
+    UserManager(String name, String email, String password, String mobileNo) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -19,7 +19,7 @@ public class UserManager {
 
     Scanner input = new Scanner(System.in);
 
-    public void userRegister() throws NoSuchAlgorithmException {
+    public void userRegister() {
         System.out.print("Enter Name: ");
         name = input.nextLine();
 
@@ -28,24 +28,23 @@ public class UserManager {
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
-        password = StorageManager.createMD5Hash(password);
+        password = StorageManager.hashPassword(password);
 
         System.out.print("Enter Mobile No: ");
         mobileNo = input.nextLine();
 
-        StorageManager.userDataInsert(name,email,password,mobileNo);
+        StorageManager.userDataInsert(name, email, password, mobileNo);
 
     }
 
-    public void userLogin(String email,String password){
+    public void userLogin(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public String getUserInfo(){
-        return name+" "+email+" "+password+" "+mobileNo;
+    public String getUserInfo() {
+        return name + " " + email + " " + password + " " + mobileNo;
     }
-
 
 
 }

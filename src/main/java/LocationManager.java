@@ -16,10 +16,6 @@ public class LocationManager {
     double travelCost;
 
     Scanner input = new Scanner(System.in);
-   // TicketGenerator encodeMethod = new TicketGenerator();
-
-    // JSONArray arry = new JSONArray()
-
 
     public String gettingLocations() {
 
@@ -28,8 +24,6 @@ public class LocationManager {
         System.out.print("Enter Ending Location: ");
         endingLocation = input.nextLine();
         return (startingLocation + " " + endingLocation);
-
-        // calculateTravelDistance_Time(startingPoint,endingPoint);
 
     }
 
@@ -72,21 +66,21 @@ public class LocationManager {
 
             double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
             double tCost;
-            if(numericalDistance<3){
-                tCost = 27.00 + (numericalDistance*3.093);
-            }else {
-                tCost = 35.00 + (numericalDistance*3.093);
+            if (numericalDistance < 3) {
+                tCost = 27.00 + (numericalDistance * 3.093);
+            } else {
+                tCost = 35.00 + (numericalDistance * 3.093);
             }
 
-            System.out.println(startingLocation + " -> " +endingLocation);
+            System.out.println(startingLocation + " -> " + endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
-            System.out.printf("Travel Cost: RS.%.2f\n" , tCost);
+            System.out.printf("Travel Cost: RS.%.2f\n", tCost);
 
             //   System.out.println("status: " + status);
 
 
-            return startingLocation + "," + endingLocation + "," + distance + "," + duration+ "," + tCost;
+            return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
 
             //System.out.println("Response Code: " + response.statusCode());
         } catch (Exception e) {

@@ -56,5 +56,29 @@ public class LocationManager {
             e.printStackTrace();
         }
     }
+    // MD5 hashing
+
+    public static String createMD5Hash(String input)
+            throws NoSuchAlgorithmException {
+
+        String hashText = null;
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        byte[] messageDigest = md.digest(input.getBytes());
+
+        hashText = convertToHex(messageDigest);
+
+        return hashText;
+    }
+
+    private static String convertToHex(final byte[] messageDigest) {
+        BigInteger bigint = new BigInteger(1, messageDigest);
+        String hexText = bigint.toString(16);
+        while (hexText.length() < 32) {
+            hexText = "0".concat(hexText);
+        }
+        return hexText;
+    }
+
 }
 */
