@@ -1,3 +1,4 @@
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 public class UserManager {
     String name;
@@ -18,7 +19,7 @@ public class UserManager {
 
     Scanner input = new Scanner(System.in);
 
-    public void userRegister(){
+    public void userRegister() throws NoSuchAlgorithmException {
         System.out.print("Enter Name: ");
         name = input.nextLine();
 
@@ -27,10 +28,12 @@ public class UserManager {
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
-       // StorageManager.createMD5Hash(password)
+        password = StorageManager.createMD5Hash(password);
 
         System.out.print("Enter Mobile No: ");
         mobileNo = input.nextLine();
+
+        StorageManager.userDataInsert(name,email,password,mobileNo);
 
     }
 

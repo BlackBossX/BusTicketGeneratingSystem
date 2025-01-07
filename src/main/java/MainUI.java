@@ -2,7 +2,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class MainUI {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         MainUI UI = new MainUI();
         LocationManager location = new LocationManager();
         TicketGenerator generateTicket = new TicketGenerator();

@@ -85,17 +85,17 @@ public class StorageManager {
         }
     }
 
-    public void userDataInsert(String name,String email,String pass,String mobileNo){
+    public static void userDataInsert(String name,String email,String pass,String mobileNo){
         String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
         String username = "root";
         String password = "2419624196";
 
-        String sql = "INSERT INTO trips (name, email, password, phone) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1,name);
+            statement.setString(1, name);
             statement.setString(2, email);
             statement.setString(3, pass);
             statement.setString(4, mobileNo);
