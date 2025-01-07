@@ -1,3 +1,4 @@
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class MainUI {
@@ -7,11 +8,11 @@ public class MainUI {
         TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
         StorageManager storage = new StorageManager();
-        UserManager user1 = new UserManager(1,"Malan",
+/*       UserManager user1 = new UserManager(1,"Malan",
                 "malandealwis@gamil.com","24196","0712832025");
 
-        UserManager user2 = new UserManager(2,"Dilhara",
-                "dilharabandara@gamil.com","1234","0718697687");
+       UserManager user2 = new UserManager(2,"Dilhara",
+                "dilharabandara@gamil.com","1234","0718697687");*/
 
 
 
@@ -22,10 +23,12 @@ public class MainUI {
 
         switch (inputNumber) {
             case 1:
-                System.out.println("User Details: "+user1.getUserInfo().split(" ")[1]);
+                UserManager user = new UserManager();
+                user.userRegister();
                 break;
             case 2:
-                // break;
+
+                break;
             default:
                 System.out.println("Invalid Input");
 
@@ -39,9 +42,8 @@ public class MainUI {
         switch (inputMenuNumber) {
             case 1:
                 String[] fetchData = location.getTravelDistanceTime().split(",");
-                double costIntoDouble = Double.parseDouble(fetchData[3]);
-                storage.travelDataInsert(location.tripID,fetchData[0], fetchData[1], fetchData[2],costIntoDouble);
-
+                double costIntoDouble = Double.parseDouble(fetchData[4]);
+                storage.travelDataInsert(fetchData[0], fetchData[1], fetchData[2],fetchData[3],costIntoDouble);
                 break;
             case 2:
                 generateTicket.generateQR();
@@ -51,8 +53,8 @@ public class MainUI {
                 storage.connectionSetup();
                 break;
             case 4:
-                storage.userDataInsert(user1.userID,user1.name, user1.email, user1.password, user1.mobileNo);
-                storage.userDataInsert(user2.userID,user2.name, user2.email, user2.password, user2.mobileNo);
+               // storage.userDataInsert(user1.userID,user1.name, user1.email, user1.password, user1.mobileNo);
+               // storage.userDataInsert(user2.userID,user2.name, user2.email, user2.password, user2.mobileNo);
                 break;
             case 5:
                 location.getTravelDistanceTime();

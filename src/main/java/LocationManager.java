@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 public class LocationManager {
 
-    int tripID;
     String startingLocation;
     String endingLocation;
     double travelDistance;
@@ -23,9 +22,6 @@ public class LocationManager {
 
 
     public String gettingLocations() {
-        System.out.print("Enter Bus Route ID: ");
-        tripID = input.nextInt();
-        input.nextLine();
 
         System.out.print("Enter Starting Location: ");
         startingLocation = input.nextLine();
@@ -90,7 +86,7 @@ public class LocationManager {
             //   System.out.println("status: " + status);
 
 
-            return startingLocation + "," + endingLocation + "," + distance + "," + tCost;
+            return startingLocation + "," + endingLocation + "," + distance + "," + duration+ "," + tCost;
 
             //System.out.println("Response Code: " + response.statusCode());
         } catch (Exception e) {
