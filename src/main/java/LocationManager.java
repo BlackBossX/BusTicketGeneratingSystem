@@ -17,6 +17,7 @@ public class LocationManager {
     double travelCost;
 
     Scanner input = new Scanner(System.in);
+   // TicketGenerator encodeMethod = new TicketGenerator();
 
     // JSONArray arry = new JSONArray()
 
@@ -47,8 +48,8 @@ public class LocationManager {
             // Build the GET request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
-                            "origins=" + n[0] + "&" +
-                            "destinations=" + n[1] + "&" +
+                            "origins=" + TicketGenerator.encodeURL(startingLocation) + "&" +
+                            "destinations=" + TicketGenerator.encodeURL(endingLocation) + "&" +
                             "key=AIzaSyASImPQNkxyWnMrFZ7hEDgx-szlLkeEPHk"))
                     .GET()
                     .build();
@@ -57,7 +58,6 @@ public class LocationManager {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // System.out.println("Response Body: " + response.body());
-
             JSONObject jsonObject = new JSONObject(response.body());
 
             // starting with [] mean its JSONArray and starting with {} mean its JSONObject
@@ -74,13 +74,23 @@ public class LocationManager {
             JSONObject durationObj = elements0.getJSONObject("duration");
             String duration = durationObj.getString("text");
 
-            System.out.println(n[0] + " -> " + n[1]);
+            double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
+            double tCost;
+            if(numericalDistance<3){
+                tCost = 27.00 + (numericalDistance*3.093);
+            }else {
+                tCost = 35.00 + (numericalDistance*3.093);
+            }
+
+            System.out.println(startingLocation + " -> " +endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
+            System.out.printf("Travel Cost: RS.%.2f\n" , tCost);
+
             //   System.out.println("status: " + status);
 
 
-            return n[0] + " " + n[1] + " " + distance + " " + duration;
+            return startingLocation + "," + endingLocation + "," + distance + "," + tCost;
 
             //System.out.println("Response Code: " + response.statusCode());
         } catch (Exception e) {

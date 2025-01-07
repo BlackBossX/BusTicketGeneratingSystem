@@ -54,5 +54,15 @@ public class TicketGenerator {
         return "";
     }
 
+    public static String encodeURL(String location){
+        try {
+            String encodedData = URLEncoder.encode(location,"UTF-8");
+            return encodedData;
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
 }

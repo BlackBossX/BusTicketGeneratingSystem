@@ -38,8 +38,9 @@ public class MainUI {
 
         switch (inputMenuNumber) {
             case 1:
-                String[] fetchData = location.getTravelDistanceTime().split(" ");
-                storage.travelDataInsert(location.tripID,fetchData[0], fetchData[1], fetchData[2],750.0);
+                String[] fetchData = location.getTravelDistanceTime().split(",");
+                double costIntoDouble = Double.parseDouble(fetchData[3]);
+                storage.travelDataInsert(location.tripID,fetchData[0], fetchData[1], fetchData[2],costIntoDouble);
 
                 break;
             case 2:
@@ -54,7 +55,8 @@ public class MainUI {
                 storage.userDataInsert(user2.userID,user2.name, user2.email, user2.password, user2.mobileNo);
                 break;
             case 5:
-                // break;
+                location.getTravelDistanceTime();
+                break;
             case 6:
                 break;
             default:
