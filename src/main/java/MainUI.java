@@ -7,6 +7,7 @@ public class MainUI {
         TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
         StorageManager storage = new StorageManager();
+        UserManager user = new UserManager();
 
         System.out.println("---Welcome to Bus Tikka---");
         UI.loginProcess();
@@ -14,10 +15,12 @@ public class MainUI {
 
         switch (inputNumber) {
             case 1:
-                UserManager user = new UserManager();
                 user.userRegister();
                 break;
             case 2:
+                user.userLogin();
+               // System.out.println(StorageManager.getPassFromTable("malandealwis@gmail.com"));
+
                 break;
             default:
                 System.out.println("Invalid Input");

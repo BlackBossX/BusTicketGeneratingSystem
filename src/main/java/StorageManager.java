@@ -1,7 +1,5 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class StorageManager {
@@ -16,37 +14,6 @@ public class StorageManager {
             System.out.println("Connected to the database!");
         } catch (SQLException e) {
             System.out.println("Failed to connect to the database!");
-            e.printStackTrace();
-        }
-    }
-
-
-    public void userDataInsert(int userID, String name, String email, String pass, String mobile) {
-        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
-        String username = "root";
-        String password = "2419624196";
-
-        // Generate the next user ID
-        String prefix = "U";
-        String customUserId = prefix + String.format("%04d", userID); // Output: U0001, U0002, ...
-
-
-        String sql = "INSERT INTO users (user_id, name, email, password, phone) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, customUserId);
-            statement.setString(2, name);
-            statement.setString(3, email);
-            statement.setString(4, pass);
-            statement.setString(5, mobile);
-
-            statement.executeUpdate();
-
-            System.out.println("Data inserted successfully!");
-        } catch (Exception e) {
-            System.out.println("Oops Something Wrong!");
             e.printStackTrace();
         }
     }
@@ -104,7 +71,7 @@ public class StorageManager {
 
     private static final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
-    // Hash the password
+    // Hash the password this make 60 characters hash , so I made password column size for 60 as well
     public static String hashPassword(String plainPassword) {
         return bcrypt.encode(plainPassword);
     }
@@ -112,6 +79,39 @@ public class StorageManager {
     // verify the password
     public static boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
+    }
+
+
+
+    static String savedPass;
+    static String savedName;
+    public static String getPassFromTable(String email){
+        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
+        String username = "root";
+        String password = "2419624196";
+
+
+        String sql = "SELECT password,name from Users where email=?";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            ResultSet rs= statement.executeQuery();
+
+            while (rs.next()){
+                savedPass = rs.getString(1);
+                savedName = rs.getString(2);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("Please Enter Correct Email!");
+            e.printStackTrace();
+        }
+
+        return savedPass+" "+savedName;
+
     }
 
 
