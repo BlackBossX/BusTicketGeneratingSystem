@@ -15,7 +15,7 @@ public class MainUI {
 
         switch (inputNumber) {
             case 1:
-                System.out.println("this is a test")
+                System.out.println("this is a test");
                 user.userRegister();
                 break;
             case 2:
@@ -23,7 +23,6 @@ public class MainUI {
                 break;
             default:
                 System.out.println("Invalid Input");
-
         }
 
         UI.showMainMenu();
