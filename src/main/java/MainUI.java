@@ -19,8 +19,6 @@ public class MainUI {
                 break;
             case 2:
                 user.userLogin();
-               // System.out.println(StorageManager.getPassFromTable("malandealwis@gmail.com"));
-
                 break;
             default:
                 System.out.println("Invalid Input");

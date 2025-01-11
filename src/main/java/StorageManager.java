@@ -1,9 +1,10 @@
 import java.sql.*;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class StorageManager {
-
+    final static String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
+    final static String username = "root";
+    final static String password = "2419624196";
 
     public void connectionSetup() {
         String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
@@ -19,10 +20,8 @@ public class StorageManager {
     }
 
 
-    public void travelDataInsert(String s_location, String e_location, String Distance, String Duration, double cost) {
-        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
-        String username = "root";
-        String password = "2419624196";
+    public void travelDataInsert(String s_location, String e_location,
+                                 String Distance, String Duration, double cost) {
 
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
@@ -45,9 +44,6 @@ public class StorageManager {
     }
 
     public static void userDataInsert(String name, String email, String pass, String mobileNo) {
-        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
-        String username = "root";
-        String password = "2419624196";
 
         String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
@@ -86,11 +82,6 @@ public class StorageManager {
     static String savedPass;
     static String savedName;
     public static String getPassFromTable(String email){
-        String url = "jdbc:mysql://localhost:3306/busticketgeneratingsystem";
-        String username = "root";
-        String password = "2419624196";
-
-
         String sql = "SELECT password,name from Users where email=?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
