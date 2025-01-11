@@ -2,67 +2,39 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class TicketGenerator {
-    String ticketID;
+    private static final String QR_API_URL = "http://api.qrserver.com/v1/create-qr-code/?data=";
+    private static final String QR_SIZE = "&size=300x300";
 
-    LocationManager locationInfo = new LocationManager();
-    UserManager userInfo = new UserManager();
-
+    private LocationManager locationInfo = new LocationManager();
+    private UserManager userInfo = new UserManager();
 
     public void generateQR() {
-
         try {
             String locationData = locationInfo.getTravelDistanceTime();
-
-            String name1 = "Malan";
-            String name2 = "Alwis";
-            String ticketID = "TB10000";
             String[] splitLocation = locationData.split(",");
 
-            String encodedURL = encodeURL(name1, name2, ticketID,
-                    splitLocation[0], splitLocation[1], splitLocation[2],
-                    splitLocation[3]);
+            String encodedURL = encodeURL("Malan", "Alwis", "TB10000",
+                    splitLocation[0], splitLocation[1], splitLocation[2], splitLocation[3]);
 
-
-            String URL = "http://api.qrserver.com/v1/create-qr-code/?data=" + encodedURL + "&size=300x300";
-            System.out.println("Your Ticket QR code here: " + URL);
+            String qrCodeURL = QR_API_URL + encodedURL + QR_SIZE;
+            System.out.println("Your Ticket QR code here: " + qrCodeURL);
         } catch (Exception e) {
             System.out.println("Can't Generate QR!");
-            System.out.println(" ");
-            generateQR();
+            e.printStackTrace();
         }
-
-
     }
 
-    public String encodeURL(String fName, String lName, String tID,
-                            String startLocation, String endLocation,
-                            String distance, String duration) {
+    private String encodeURL(String fName, String lName, String tID,
+                             String startLocation, String endLocation,
+                             String distance, String duration) {
         try {
-            String data = "Ticket ID: " + tID + "\n\n" +
-                    "Name: " + fName + lName + "\n\n" +
-                    "Travel Route: " + startLocation + " -> " + endLocation + "\n" +
-                    "Distance: " + distance + "\n" +
-                    "Duration: " + duration;
+            String data = String.format("Ticket ID: %s\n\nName: %s %s\n\nTravel Route: %s -> %s\nDistance: %s\nDuration: %s",
+                    tID, fName, lName, startLocation, endLocation, distance, duration);
 
-            // Encode the string for use in a URL
-            String encodedData = URLEncoder.encode(data, "UTF-8");
-
-            return encodedData;
+            return URLEncoder.encode(data, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return "";
     }
-
-    public static String encodeURL(String location) {
-        try {
-            String encodedData = URLEncoder.encode(location, "UTF-8");
-            return encodedData;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-
 }
