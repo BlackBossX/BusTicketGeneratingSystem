@@ -1,23 +1,21 @@
 import java.util.Scanner;
 
 public class UserManager {
-    String name;
-    String email;
-    String password;
-    String mobileNo;
+    private String name;
+    private String email;
+    private String password;
+    private String mobileNo;
+    private final Scanner input = new Scanner(System.in);
 
-    UserManager() {
-
+    public UserManager() {
     }
 
-    UserManager(String name, String email, String password, String mobileNo) {
+    public UserManager(String name, String email, String password, String mobileNo) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.mobileNo = mobileNo;
     }
-
-    Scanner input = new Scanner(System.in);
 
     public void userRegister() {
         System.out.print("Enter Name: ");
@@ -34,24 +32,24 @@ public class UserManager {
         mobileNo = input.nextLine();
 
         StorageManager.userDataInsert(name, email, password, mobileNo);
-
     }
 
     public void userLogin() {
         System.out.print("Enter Email: ");
         email = input.nextLine();
-        String returnedHashedPass = StorageManager.getPassFromTable(email).split(" ")[0];
-        String returnedName = StorageManager.getPassFromTable(email).split(" ")[1];
+        String[] userData = StorageManager.getPassFromTable(email).split(" ");
+        String returnedHashedPass = userData[0];
+        String returnedName = userData[1];
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
+
         if (returnedHashedPass.equals("null")) {
             System.out.println("Invalid email or password. Please try again.");
             userLogin();
         } else {
             try {
                 if (StorageManager.verifyPassword(password, returnedHashedPass)) {
-
                     System.out.println("Successfully Logged In!");
                     System.out.println("Hey, " + returnedName);
                 }
@@ -62,15 +60,7 @@ public class UserManager {
         }
     }
 
-
     public String getUserInfo() {
-        return name + " " + email + " " + password + " " + mobileNo;
-
-
+        return String.format("%s %s %s %s", name, email, password, mobileNo);
     }
 }
-
-
-
-
-
