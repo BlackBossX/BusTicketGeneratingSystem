@@ -7,84 +7,52 @@ import java.net.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
 public class LocationManager {
 
-    String startingLocation;
-    String endingLocation;
-    double travelDistance;
-    double travelCost;
+    private String startingLocation;
+    private String endingLocation;
+    private final Scanner input = new Scanner(System.in);
 
-    Scanner input = new Scanner(System.in);
-
-    public String gettingLocations() {
-
+    public String getLocations() {
         System.out.print("Enter Starting Location: ");
         startingLocation = input.nextLine();
         System.out.print("Enter Ending Location: ");
         endingLocation = input.nextLine();
-        return (startingLocation + " " + endingLocation);
-
+        return startingLocation + " " + endingLocation;
     }
-
 
     public String getTravelDistanceTime() {
         try {
-            // Create HttpClient
             HttpClient client = HttpClient.newHttpClient();
+            getLocations();
 
-            String[] n = gettingLocations().split(" ");
-
-            // Build the GET request
+            String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
                             "origins=" + TicketGenerator.encodeURL(startingLocation) + "&" +
                             "destinations=" + TicketGenerator.encodeURL(endingLocation) + "&" +
-                            "key=AIzaSyASImPQNkxyWnMrFZ7hEDgx-szlLkeEPHk"))
+                            "key=" + apiKey))
                     .GET()
                     .build();
 
-            // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            // System.out.println("Response Body: " + response.body());
             JSONObject jsonObject = new JSONObject(response.body());
 
-            // starting with [] mean its JSONArray and starting with {} mean its JSONObject
-
             JSONArray rowsArray = jsonObject.getJSONArray("rows");
-            JSONObject rows0 = rowsArray.getJSONObject(0);
-            JSONArray elements = rows0.getJSONArray("elements");
-            JSONObject elements0 = elements.getJSONObject(0);
-            JSONObject distanceObj = elements0.getJSONObject("distance");
-            String distance = distanceObj.getString("text");
-
-            String status = elements0.getString("status");
-
-            JSONObject durationObj = elements0.getJSONObject("duration");
-            String duration = durationObj.getString("text");
+            JSONObject elements0 = rowsArray.getJSONObject(0).getJSONArray("elements").getJSONObject(0);
+            String distance = elements0.getJSONObject("distance").getString("text");
+            String duration = elements0.getJSONObject("duration").getString("text");
 
             double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
-            double tCost;
-            if (numericalDistance < 3) {
-                tCost = 27.00 + (numericalDistance * 3.093);
-            } else {
-                tCost = 35.00 + (numericalDistance * 3.093);
-            }
+            double travelCost = (numericalDistance < 3) ? 27.00 + (numericalDistance * 3.093) : 35.00 + (numericalDistance * 3.093);
 
             System.out.println(startingLocation + " -> " + endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
-            System.out.printf("Travel Cost: RS.%.2f\n", tCost);
+            System.out.printf("Travel Cost: RS.%.2f\n", travelCost);
 
-            //   System.out.println("status: " + status);
-
-
-            return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
-
-            //System.out.println("Response Code: " + response.statusCode());
+            return String.join(",", startingLocation, endingLocation, distance, duration, String.valueOf(travelCost));
         } catch (Exception e) {
-            // e.printStackTrace();
             System.out.println("Type Locations Correctly!");
         }
         return "";
