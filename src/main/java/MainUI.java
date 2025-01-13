@@ -9,14 +9,14 @@ public class MainUI {
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager();
 
-        System.out.println("---Welcome to Bus Tikka---");
+        MainUI.BusTikkaArt();
         UI.loginProcess();
         int inputNumber = input.nextInt();
 
         switch (inputNumber) {
             case 1:
-                System.out.println("this is a test")
                 user.userRegister();
+                user.userLogin();
                 break;
             case 2:
                 user.userLogin();
@@ -70,5 +70,17 @@ public class MainUI {
     private void loginProcess() {
         System.out.println("1) Register");
         System.out.println("2) Login");
+    }
+
+    public static void BusTikkaArt() {
+        System.out.print(
+                "  ____              _______ _ _    _         \n" +
+                        " |  _ \\            |__   __(_) |  | |        \n" +
+                        " | |_) |_   _ ___     | |   _| | _| | ____ _ \n" +
+                        " |  _ <| | | / __|    | |  | | |/ / |/ / _` |\n" +
+                        " | |_) | |_| \\__ \\    | |  | |   <|   < (_| |\n" +
+                        " |____/ \\__,_|___/    |_|  |_|_|\\_\\_|\\_\\__,_|\n" +
+                        "                                             \n"
+        );
     }
 }

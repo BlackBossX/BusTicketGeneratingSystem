@@ -44,11 +44,13 @@ public class LocationManager {
                     .GET()
                     .build();
 
+
             // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // System.out.println("Response Body: " + response.body());
             JSONObject jsonObject = new JSONObject(response.body());
+            //System.out.println("Response Body: " + response.body());
 
             // starting with [] mean its JSONArray and starting with {} mean its JSONObject
 

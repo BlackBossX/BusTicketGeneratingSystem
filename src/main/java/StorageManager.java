@@ -57,7 +57,7 @@ public class StorageManager {
 
             statement.executeUpdate();
 
-            System.out.println("Data inserted successfully!");
+            System.out.println("Registration Successful!");
         } catch (Exception e) {
             System.out.println("Oops Something Wrong!");
             e.printStackTrace();

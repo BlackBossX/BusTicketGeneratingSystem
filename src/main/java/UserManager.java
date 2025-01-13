@@ -20,6 +20,8 @@ public class UserManager {
     Scanner input = new Scanner(System.in);
 
     public void userRegister() {
+
+        System.out.println("--Register--\n");
         System.out.print("Enter Name: ");
         name = input.nextLine();
 
@@ -38,6 +40,7 @@ public class UserManager {
     }
 
     public void userLogin() {
+        System.out.println("--Login--\n");
         System.out.print("Enter Email: ");
         email = input.nextLine();
         String returnedHashedPass = StorageManager.getPassFromTable(email).split(" ")[0];
@@ -49,16 +52,13 @@ public class UserManager {
             System.out.println("Invalid email or password. Please try again.");
             userLogin();
         } else {
-            try {
                 if (StorageManager.verifyPassword(password, returnedHashedPass)) {
-
                     System.out.println("Successfully Logged In!");
                     System.out.println("Hey, " + returnedName);
+                }else{
+                    System.out.println("Invalid email or password. Please try again.");
+                    userLogin();
                 }
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid email or password. Please try again.");
-                userLogin();
-            }
         }
     }
 
