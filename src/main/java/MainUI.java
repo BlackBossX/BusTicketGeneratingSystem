@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class MainUI {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MainUI UI = new MainUI();
         LocationManager location = new LocationManager();
         TicketGenerator generateTicket = new TicketGenerator();
@@ -19,7 +19,7 @@ public class MainUI {
                 user.userLogin();
                 break;
             case 2:
-                user.userLogin();
+                //user.userLogin();
                 break;
             default:
                 System.out.println("Invalid Input");
@@ -31,9 +31,7 @@ public class MainUI {
 
         switch (inputMenuNumber) {
             case 1:
-                String[] fetchData = location.getTravelDistanceTime().split(",");
-                double costIntoDouble = Double.parseDouble(fetchData[4]);
-                storage.travelDataInsert(fetchData[0], fetchData[1], fetchData[2], fetchData[3], costIntoDouble);
+                storage.travelDataInsert();
                 break;
             case 2:
                 generateTicket.generateQR();

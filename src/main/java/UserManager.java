@@ -5,6 +5,7 @@ public class UserManager {
     private String email;
     private String password;
     private String mobileNo;
+    private static String returnedName;
     private final Scanner input = new Scanner(System.in);
 
     public UserManager() {
@@ -42,7 +43,7 @@ public class UserManager {
         email = input.nextLine();
         String[] userData = StorageManager.getPassFromTable(email).split(" ");
         String returnedHashedPass = userData[0];
-        String returnedName = userData[1];
+        returnedName = userData[1];
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
@@ -51,17 +52,21 @@ public class UserManager {
             System.out.println("Invalid email or password. Please try again.");
             userLogin();
         } else {
-                if (StorageManager.verifyPassword(password, returnedHashedPass)) {
-                    System.out.println("Successfully Logged In!");
-                    System.out.println("Hey, " + returnedName);
-                }else{
-                    System.out.println("Invalid email or password. Please try again.");
-                    userLogin();
-                }
+            if (StorageManager.verifyPassword(password, returnedHashedPass)) {
+                System.out.println("Successfully Logged In!");
+                System.out.println("Hey, " + returnedName);
+            } else {
+                System.out.println("Invalid email or password. Please try again.");
+                userLogin();
+            }
         }
     }
 
     public String getUserInfo() {
         return String.format("%s %s %s %s", name, email, password, mobileNo);
+    }
+
+    public String getUserName() {
+        return returnedName;
     }
 }

@@ -6,32 +6,29 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager {
-
-    String startingLocation;
-    String endingLocation;
-    double travelDistance;
-    double travelCost;
-
-    Scanner input = new Scanner(System.in);
+    private String startingLocation;
+    private String endingLocation;
+    private String duration;
+    private String distance;
+    private double tCost;
+    private final Scanner input = new Scanner(System.in);   //encapsulation
+    Dotenv dotenv = Dotenv.load();
 
     public String gettingLocations() {
-
         System.out.print("Enter Starting Location: ");
         startingLocation = input.nextLine();
         System.out.print("Enter Ending Location: ");
         endingLocation = input.nextLine();
         return (startingLocation + " " + endingLocation);
-
     }
-
 
     public String getTravelDistanceTime() {
         try {
-            // Create HttpClient
             HttpClient client = HttpClient.newHttpClient();
+            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
 
             String[] n = gettingLocations().split(" ");
 
@@ -40,34 +37,24 @@ public class LocationManager {
                     .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
                             "origins=" + TicketGenerator.encodeURL(startingLocation) + "&" +
                             "destinations=" + TicketGenerator.encodeURL(endingLocation) + "&" +
-                            "key=AIzaSyASImPQNkxyWnMrFZ7hEDgx-szlLkeEPHk"))
+                            "key=" + apiKey))
                     .GET()
                     .build();
 
-
-            // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // System.out.println("Response Body: " + response.body());
             JSONObject jsonObject = new JSONObject(response.body());
             //System.out.println("Response Body: " + response.body());
 
             // starting with [] mean its JSONArray and starting with {} mean its JSONObject
-
             JSONArray rowsArray = jsonObject.getJSONArray("rows");
-            JSONObject rows0 = rowsArray.getJSONObject(0);
-            JSONArray elements = rows0.getJSONArray("elements");
-            JSONObject elements0 = elements.getJSONObject(0);
-            JSONObject distanceObj = elements0.getJSONObject("distance");
-            String distance = distanceObj.getString("text");
+            JSONObject elements0 = rowsArray.getJSONObject(0).getJSONArray("elements").getJSONObject(0);
+            distance = elements0.getJSONObject("distance").getString("text");
+            duration = elements0.getJSONObject("duration").getString("text");
 
             String status = elements0.getString("status");
 
-            JSONObject durationObj = elements0.getJSONObject("duration");
-            String duration = durationObj.getString("text");
-
             double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
-            double tCost;
             if (numericalDistance < 3) {
                 tCost = 27.00 + (numericalDistance * 3.093);
             } else {
@@ -79,16 +66,31 @@ public class LocationManager {
             System.out.println("Duration: " + duration);
             System.out.printf("Travel Cost: RS.%.2f\n", tCost);
 
-            //   System.out.println("status: " + status);
-
-
             return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
 
-            //System.out.println("Response Code: " + response.statusCode());
         } catch (Exception e) {
-            // e.printStackTrace();
             System.out.println("Type Locations Correctly!");
         }
         return "";
+    }
+
+    public String getStartingLocation(){
+        return startingLocation;
+    }
+
+    public String getEndingLocation(){
+        return endingLocation;
+    }
+
+    public String getDistance(){
+        return distance;
+    }
+
+    public String getDuration(){
+        return duration;
+    }
+
+    public double getTotalCost(){
+        return tCost;
     }
 }
