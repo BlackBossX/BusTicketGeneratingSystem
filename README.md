@@ -75,7 +75,7 @@ FOR EACH ROW
 BEGIN
     DECLARE next_id INT;
     SELECT COALESCE(MAX(CAST(SUBSTRING(trip_id, 2) AS UNSIGNED)), 0) + 1 INTO next_id FROM Trips;
-    SET NEW.trip_id = CONCAT('T', LPAD(next_id, 4, '0'));
+    SET NEW.trip_id = CONCAT('R', LPAD(next_id, 4, '0'));
 END;
 ```
 
