@@ -8,6 +8,8 @@ public class UserManager {
     private static String returnedName;
     private final Scanner input = new Scanner(System.in);
 
+    StorageManager storage = new StorageManager();
+
     public UserManager() {
     }
 
@@ -29,19 +31,19 @@ public class UserManager {
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
-        password = StorageManager.hashPassword(password);
+        password = storage.hashPassword(password);
 
         System.out.print("Enter Mobile No: ");
         mobileNo = input.nextLine();
 
-        StorageManager.userDataInsert(name, email, password, mobileNo);
+        storage.userDataInsert(name, email, password, mobileNo);
     }
 
     public void userLogin() {
         System.out.println("--Login--\n");
         System.out.print("Enter Email: ");
         email = input.nextLine();
-        String[] userData = StorageManager.getPassFromTable(email).split(" ");
+        String[] userData = storage.getPassFromTable(email).split(" ");
         String returnedHashedPass = userData[0];
         returnedName = userData[1];
 
@@ -52,7 +54,7 @@ public class UserManager {
             System.out.println("Invalid email or password. Please try again.");
             userLogin();
         } else {
-            if (StorageManager.verifyPassword(password, returnedHashedPass)) {
+            if (storage.verifyPassword(password, returnedHashedPass)) {
                 System.out.println("Successfully Logged In!");
                 System.out.println("Hey, " + returnedName);
             } else {
@@ -62,11 +64,11 @@ public class UserManager {
         }
     }
 
-    public String getUserInfo() {
-        return String.format("%s %s %s %s", name, email, password, mobileNo);
-    }
-
     public String getUserName() {
         return returnedName;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

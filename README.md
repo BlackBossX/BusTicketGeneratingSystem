@@ -44,6 +44,7 @@ CREATE TABLE Users (
 
 **Trigger for User ID Generation:**
 ```sql
+DELIMITER $$
 CREATE TRIGGER before_insert_users 
 BEFORE INSERT ON Users 
 FOR EACH ROW 
@@ -51,7 +52,8 @@ BEGIN
     DECLARE next_id INT;
     SELECT COALESCE(MAX(CAST(SUBSTRING(user_id, 2) AS UNSIGNED)), 0) + 1 INTO next_id FROM Users;
     SET NEW.user_id = CONCAT('U', LPAD(next_id, 4, '0'));
-END;
+END$$;
+DELIMITER ;
 ```
 
 ### Trips Table
@@ -69,6 +71,7 @@ CREATE TABLE Trips (
 
 **Trigger for Trip ID Generation:**
 ```sql
+DELIMITER $$
 CREATE TRIGGER before_insert_trips 
 BEFORE INSERT ON Trips 
 FOR EACH ROW 
@@ -76,9 +79,39 @@ BEGIN
     DECLARE next_id INT;
     SELECT COALESCE(MAX(CAST(SUBSTRING(trip_id, 2) AS UNSIGNED)), 0) + 1 INTO next_id FROM Trips;
     SET NEW.trip_id = CONCAT('R', LPAD(next_id, 4, '0'));
-END;
+END$$;
+DELIMITER ;
 ```
+### Tickets Table
+```sql
+CREATE TABLE Tickets (
+    ticket_id VARCHAR(10) PRIMARY KEY,
+    user_name VARCHAR(50) NOT NULL,
+    start_location VARCHAR(100) NOT NULL,
+    end_location VARCHAR(100) NOT NULL,
+    distance VARCHAR(20) NOT NULL,
+    duration VARCHAR(20) NOT NULL,
+    total_fare DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+```
+**Trigger for Ticket ID Generation:**
+```sql
+DELIMITER $$
+
+CREATE TRIGGER before_insert_tickets 
+BEFORE INSERT ON Tickets 
+FOR EACH ROW 
+BEGIN
+    DECLARE next_id INT;
+    SELECT COALESCE(MAX(CAST(SUBSTRING(ticket_id, 2) AS UNSIGNED)), 0) + 1 INTO next_id 
+    FROM Tickets;
+    SET NEW.ticket_id = CONCAT('T', LPAD(next_id, 4, '0'));
+END$$
+
+DELIMITER ;
+```
 ---
 
 ## 🛠️ Technologies Used

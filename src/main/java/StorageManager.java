@@ -3,14 +3,18 @@ import java.sql.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class StorageManager extends LocationManager{
+public class StorageManager{
     static Dotenv dotenv = Dotenv.load();
-    private static String url = dotenv.get("DB_URL");
+    private final static String url = dotenv.get("DB_URL");
     private final static String username = dotenv.get("DB_USERNAME");
     private final static String password = dotenv.get("DB_PASSWORD");
     private static String savedPass;
     private static String savedName;
-    LocationManager locationObj = new LocationManager();
+    private final LocationManager storage;
+
+    public StorageManager(){
+        storage = new LocationManager();
+    }   //composition
 
     public void connectionSetup() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -22,17 +26,17 @@ public class StorageManager extends LocationManager{
     }
 
     public void travelDataInsert() {
-        locationObj.getTravelDistanceTime();
+        storage.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, locationObj.getStartingLocation());
-            statement.setString(2, locationObj.getEndingLocation());
-            statement.setString(3, locationObj.getDistance());
-            statement.setString(4, locationObj.getDuration());
-            statement.setDouble(5, locationObj.getTotalCost());
+            statement.setString(1, storage.getStartingLocation());
+            statement.setString(2, storage.getEndingLocation());
+            statement.setString(3, storage.getDistance());
+            statement.setString(4, storage.getDuration());
+            statement.setDouble(5, storage.getTotalCost());
 
             statement.executeUpdate();
             System.out.println("Data inserted successfully!");
@@ -42,7 +46,7 @@ public class StorageManager extends LocationManager{
         }
     }
 
-    public static void userDataInsert(String name, String email, String pass, String mobileNo) {
+    public void userDataInsert(String name, String email, String pass, String mobileNo) {
         String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -62,19 +66,19 @@ public class StorageManager extends LocationManager{
     }
 
 
-    private static final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
     // Hash the password this make 60 characters hash , so I made password column size for 60 as well
-    public static String hashPassword(String plainPassword) {
+    public String hashPassword(String plainPassword) {
         return bcrypt.encode(plainPassword);
     }
 
     // verify the password
-    public static boolean verifyPassword(String plainPassword, String hashedPassword) {
+    public boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
-    public static String getPassFromTable(String email) {
+    public String getPassFromTable(String email) {
         String sql = "SELECT password,name from Users where email=?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
