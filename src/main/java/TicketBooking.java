@@ -4,41 +4,7 @@ public class TicketBooking extends StorageManager {
     private final int TOTAL_SEATS = 50;
     private boolean[] seats = new boolean[TOTAL_SEATS]; // false indicates the seat is available
     private Scanner input = new Scanner(System.in);
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
     public void bookTicket() {
