@@ -9,7 +9,6 @@ public class MainUI {
         UserManager user = new UserManager();
         TicketBooking booking = new TicketBooking() ;
 
-
         UIManager.showSystemArt();
         UIManager.showLoginProcess();
         int inputNumber = input.nextInt();
