@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainUI {
@@ -12,19 +13,30 @@ public class MainUI {
 
         UIManager.showSystemArt();
         UIManager.showLoginProcess();
-        int inputNumber = input.nextInt();
-        switch (inputNumber) {
-            case 1:
-                user.userRegister();
-                user.userLogin();
-                break;
-            case 2:
-                user.userLogin();
-                break;
-            default:
-                System.out.println("Invalid Input");
-                System.exit(0);
+        try {
+            int inputNumber = input.nextInt();
+            switch (inputNumber) {
+                case 1:
+                    user.userRegister();
+                    user.userLogin();
+                    break;
+                case 2:
+                    user.userLogin();
+                    break;
+                case 0:
+                    System.out.println("Have a Nice Day!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid Input!");
+                    System.exit(0);
+            }
+        }catch (InputMismatchException e){
+            System.out.println("invalid Input!");
+            System.exit(0);
         }
+
+
 
         UIManager.showMainMenu();
         int inputMenuNumber = input.nextInt();

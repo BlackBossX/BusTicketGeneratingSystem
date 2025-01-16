@@ -32,13 +32,12 @@ public class UserManager {
         password = input.nextLine();
         password = storage.hashPassword(password);
 
-        String mobileNo;
         while (true) {
             System.out.print("Enter Mobile No: ");
             mobileNo = input.nextLine();
 
             if (isValidMobileNumber(mobileNo)) {
-                break; // Exit the loop if the mobile number is valid
+                break;
             } else {
                 System.out.println("Invalid mobile number. Please enter a valid 10-digit number.");
             }
