@@ -1,9 +1,10 @@
 import java.sql.*;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class StorageManager{
+public class StorageManager {
     static Dotenv dotenv = Dotenv.load();
     private final static String url = dotenv.get("DB_URL");
     private final static String username = dotenv.get("DB_USERNAME");
@@ -12,20 +13,31 @@ public class StorageManager{
     private static String savedName;
     private final LocationManager storage;
 
-    public StorageManager(){
+    private static final Logger logger = Logger.getLogger(StorageManager.class.getName());
+
+    public StorageManager() {
         storage = new LocationManager();
-    }   //composition
+    } // composition
 
     public void connectionSetup() {
+        if (url == null || username == null || password == null) {
+            logger.log(Level.SEVERE, "Database connection details are missing in the .env file.");
+            return;
+        }
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Connected to the database!");
+            if (connection != null) {
+                logger.log(Level.INFO, "Connected to the database successfully!");
+            }
         } catch (SQLException e) {
-            System.out.println("Failed to connect to the database!");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to connect to the database.", e);
         }
     }
 
     public void travelDataInsert() {
+        if (url == null || username == null || password == null) {
+            logger.log(Level.SEVERE, "Database connection details are missing in the .env file.");
+            return;
+        }
         storage.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
@@ -39,14 +51,17 @@ public class StorageManager{
             statement.setDouble(5, storage.getTotalCost());
 
             statement.executeUpdate();
-            System.out.println("Data inserted successfully!");
+            logger.log(Level.INFO, "Data inserted successfully!");
         } catch (SQLException e) {
-            System.out.println("Oops Something Wrong!");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to insert travel data.", e);
         }
     }
 
     public void userDataInsert(String name, String email, String pass, String mobileNo) {
+        if (url == null || username == null || password == null) {
+            logger.log(Level.SEVERE, "Database connection details are missing in the .env file.");
+            return;
+        }
         String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -58,28 +73,30 @@ public class StorageManager{
             statement.setString(4, mobileNo);
 
             statement.executeUpdate();
-            System.out.println("Registration Successful!");
-        } catch (Exception e) {
-            System.out.println("Oops Something Wrong!");
-            e.printStackTrace();
+            logger.log(Level.INFO, "Registration Successful!");
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to insert user data.", e);
         }
     }
 
-
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
-    // Hash the password this make 60 characters hash , so I made password column size for 60 as well
+    // Hash the password this makes a 60-character hash, so the password column size is set for 60 as well
     public String hashPassword(String plainPassword) {
         return bcrypt.encode(plainPassword);
     }
 
-    // verify the password
+    // Verify the password
     public boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
     public String getPassFromTable(String email) {
-        String sql = "SELECT password,name from Users where email=?";
+        if (url == null || username == null || password == null) {
+            logger.log(Level.SEVERE, "Database connection details are missing in the .env file.");
+            return null;
+        }
+        String sql = "SELECT password, name FROM Users WHERE email = ?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -91,11 +108,9 @@ public class StorageManager{
                 savedPass = rs.getString(1);
                 savedName = rs.getString(2);
             }
-        } catch (Exception e) {
-            System.out.println("Please Enter Correct Email!");
-            e.printStackTrace();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve user data for email: " + email, e);
         }
         return savedPass + " " + savedName;
     }
-
 }
