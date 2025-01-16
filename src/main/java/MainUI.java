@@ -26,7 +26,9 @@ public class MainUI {
         }
 
         UIManager.showMainMenu();
+
         int inputMenuNumber = input.nextInt();
+
         switch (inputMenuNumber) {
             case 1:
                 storage.travelDataInsert();
