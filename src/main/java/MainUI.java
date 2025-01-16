@@ -23,6 +23,7 @@ public class MainUI {
                 break;
             default:
                 System.out.println("Invalid Input");
+                System.exit(0);
         }
 
         UIManager.showMainMenu();
