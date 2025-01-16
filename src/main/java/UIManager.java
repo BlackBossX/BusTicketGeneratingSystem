@@ -10,8 +10,10 @@ public class UIManager {
     }
 
     static void showLoginProcess() {
+        System.out.println("Please enter respected number");
         System.out.println("1) Register");
         System.out.println("2) Login");
+        System.out.println("0) Exit");
     }
 
     public static void showSystemArt() {
