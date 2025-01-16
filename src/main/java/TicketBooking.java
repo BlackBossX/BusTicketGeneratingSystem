@@ -6,11 +6,6 @@ public class TicketBooking extends StorageManager {
     private Scanner input = new Scanner(System.in);
 
 
-
-
-
-
-
 }
 
 
