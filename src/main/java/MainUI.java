@@ -7,7 +7,9 @@ public class MainUI {
         Scanner input = new Scanner(System.in);
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager();
-        TicketBooking booking = new TicketBooking() ;
+        TicketBooking booking = new TicketBooking(
+
+        ) ;
 
 
         UIManager.showSystemArt();
