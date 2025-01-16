@@ -21,7 +21,6 @@ public class UserManager {
     }
 
     public void userRegister() {
-
         System.out.println("--Register--\n");
         System.out.print("Enter Name: ");
         name = input.nextLine();
@@ -33,11 +32,26 @@ public class UserManager {
         password = input.nextLine();
         password = storage.hashPassword(password);
 
-        System.out.print("Enter Mobile No: ");
-        mobileNo = input.nextLine();
+        String mobileNo;
+        while (true) {
+            System.out.print("Enter Mobile No: ");
+            mobileNo = input.nextLine();
+
+            if (isValidMobileNumber(mobileNo)) {
+                break; // Exit the loop if the mobile number is valid
+            } else {
+                System.out.println("Invalid mobile number. Please enter a valid 10-digit number.");
+            }
+        }
 
         storage.userDataInsert(name, email, password, mobileNo);
     }
+
+    private boolean isValidMobileNumber(String mobileNo) {
+        // Check if the mobile number is exactly 10 digits and contains only numbers
+        return mobileNo.matches("\\d{10}");
+    }
+
 
     public void userLogin() {
         System.out.println("--Login--\n");
