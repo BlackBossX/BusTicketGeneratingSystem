@@ -65,6 +65,29 @@ public class StorageManager{
         }
     }
 
+    /*
+      public void busDelete(String name, String email, String pass, String mobileNo) {
+        String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            statement.setString(2, email);
+            statement.setString(3, pass);
+            statement.setString(4, mobileNo);
+
+            statement.executeUpdate();
+            System.out.println("Registration Successful!");
+        } catch (Exception e) {
+            System.out.println("Oops Something Wrong!");
+            e.printStackTrace();
+        }
+    }
+
+
+    */
+
 
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
