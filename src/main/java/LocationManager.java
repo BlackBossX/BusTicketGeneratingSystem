@@ -6,70 +6,55 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager {
+    private String startingLocation;
+    private String endingLocation;
+    private String duration;
+    private String distance;
+    private double tCost;
 
-    String startingLocation;
-    String endingLocation;
-    double travelDistance;
-    double travelCost;
+    private static final double AVG_COST_PER_KM = 3.093;
+    private static final String API_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
 
-    Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(System.in);   //encapsulation
+    Dotenv dotenv = Dotenv.load();
 
-    public String gettingLocations() {
-
+    public void gettingLocations() {
         System.out.print("Enter Starting Location: ");
         startingLocation = input.nextLine();
         System.out.print("Enter Ending Location: ");
         endingLocation = input.nextLine();
-        return (startingLocation + " " + endingLocation);
-
     }
-
 
     public String getTravelDistanceTime() {
         try {
-            // Create HttpClient
             HttpClient client = HttpClient.newHttpClient();
-
-            String[] n = gettingLocations().split(" ");
-
-            // Build the GET request
+            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
+            gettingLocations();
+            String sLoc = TicketGenerator.encodeURL(startingLocation);
+            String eLoc = TicketGenerator.encodeURL(endingLocation);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://maps.googleapis.com/maps/api/distancematrix/json?" +
-                            "origins=" + TicketGenerator.encodeURL(startingLocation) + "&" +
-                            "destinations=" + TicketGenerator.encodeURL(endingLocation) + "&" +
-                            "key=AIzaSyASImPQNkxyWnMrFZ7hEDgx-szlLkeEPHk"))
+                    .uri(new URI(API_URL + "origins=" + sLoc + "&" +
+                            "destinations=" + eLoc + "&" + "key=" + apiKey))
                     .GET()
                     .build();
-
-            // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            // System.out.println("Response Body: " + response.body());
             JSONObject jsonObject = new JSONObject(response.body());
+            //System.out.println("Response Body: " + response.body());
 
             // starting with [] mean its JSONArray and starting with {} mean its JSONObject
-
             JSONArray rowsArray = jsonObject.getJSONArray("rows");
-            JSONObject rows0 = rowsArray.getJSONObject(0);
-            JSONArray elements = rows0.getJSONArray("elements");
-            JSONObject elements0 = elements.getJSONObject(0);
-            JSONObject distanceObj = elements0.getJSONObject("distance");
-            String distance = distanceObj.getString("text");
-
-            String status = elements0.getString("status");
-
-            JSONObject durationObj = elements0.getJSONObject("duration");
-            String duration = durationObj.getString("text");
+            JSONObject elements0 = rowsArray.getJSONObject(0).getJSONArray("elements").getJSONObject(0);
+            distance = elements0.getJSONObject("distance").getString("text");
+            duration = elements0.getJSONObject("duration").getString("text");
 
             double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
-            double tCost;
             if (numericalDistance < 3) {
-                tCost = 27.00 + (numericalDistance * 3.093);
+                tCost = 27.00 + (numericalDistance * AVG_COST_PER_KM);
             } else {
-                tCost = 35.00 + (numericalDistance * 3.093);
+                tCost = 35.00 + (numericalDistance * AVG_COST_PER_KM);
             }
 
             System.out.println(startingLocation + " -> " + endingLocation);
@@ -77,16 +62,30 @@ public class LocationManager {
             System.out.println("Duration: " + duration);
             System.out.printf("Travel Cost: RS.%.2f\n", tCost);
 
-            //   System.out.println("status: " + status);
-
-
             return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
-
-            //System.out.println("Response Code: " + response.statusCode());
         } catch (Exception e) {
-            // e.printStackTrace();
             System.out.println("Type Locations Correctly!");
         }
         return "";
+    }
+
+    public String getStartingLocation() {
+        return startingLocation;
+    }
+
+    public String getEndingLocation() {
+        return endingLocation;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public double getTotalCost() {
+        return tCost;
     }
 }

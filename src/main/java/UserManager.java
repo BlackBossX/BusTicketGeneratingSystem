@@ -1,25 +1,27 @@
 import java.util.Scanner;
 
 public class UserManager {
-    String name;
-    String email;
-    String password;
-    String mobileNo;
+    private String name;
+    private String email;
+    private String password;
+    private String mobileNo;
+    private static String returnedName;
+    private final Scanner input = new Scanner(System.in);
 
-    UserManager() {
+    StorageManager storage = new StorageManager();
 
+    public UserManager() {
     }
 
-    UserManager(String name, String email, String password, String mobileNo) {
+    public UserManager(String name, String email, String password, String mobileNo) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.mobileNo = mobileNo;
     }
 
-    Scanner input = new Scanner(System.in);
-
     public void userRegister() {
+        System.out.println("--Register--\n");
         System.out.print("Enter Name: ");
         name = input.nextLine();
 
@@ -28,49 +30,58 @@ public class UserManager {
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
-        password = StorageManager.hashPassword(password);
+        password = storage.hashPassword(password);
 
-        System.out.print("Enter Mobile No: ");
-        mobileNo = input.nextLine();
+        while (true) {
+            System.out.print("Enter Mobile No: ");
+            mobileNo = input.nextLine();
 
-        StorageManager.userDataInsert(name, email, password, mobileNo);
+            if (isValidMobileNumber(mobileNo)) {
+                break;
+            } else {
+                System.out.println("Invalid mobile number. Please enter a valid 10-digit number.");
+            }
+        }
 
+        storage.userDataInsert(name, email, password, mobileNo);
     }
 
+    private boolean isValidMobileNumber(String mobileNo) {
+        // Check if the mobile number is exactly 10 digits and contains only numbers
+        return mobileNo.matches("\\d{10}");
+    }
+
+
     public void userLogin() {
+        System.out.println("--Login--\n");
         System.out.print("Enter Email: ");
         email = input.nextLine();
-        String returnedHashedPass = StorageManager.getPassFromTable(email).split(" ")[0];
-        String returnedName = StorageManager.getPassFromTable(email).split(" ")[1];
+        String[] userData = storage.getPassFromTable(email).split(" ");
+        String returnedHashedPass = userData[0];
+        returnedName = userData[1];
 
         System.out.print("Enter Password: ");
         password = input.nextLine();
+
         if (returnedHashedPass.equals("null")) {
             System.out.println("Invalid email or password. Please try again.");
             userLogin();
         } else {
-            try {
-                if (StorageManager.verifyPassword(password, returnedHashedPass)) {
-
-                    System.out.println("Successfully Logged In!");
-                    System.out.println("Hey, " + returnedName);
-                }
-            } catch (IllegalArgumentException e) {
+            if (storage.verifyPassword(password, returnedHashedPass)) {
+                System.out.println("Successfully Logged In!");
+                System.out.println("Hey, " + returnedName);
+            } else {
                 System.out.println("Invalid email or password. Please try again.");
                 userLogin();
             }
         }
     }
 
+    public String getUserName() {
+        return returnedName;
+    }
 
-    public String getUserInfo() {
-        return name + " " + email + " " + password + " " + mobileNo;
-
-
+    public String getEmail() {
+        return email;
     }
 }
-
-
-
-
-

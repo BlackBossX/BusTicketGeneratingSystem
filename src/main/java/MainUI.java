@@ -1,43 +1,51 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainUI {
-    public static void main(String[] args){
-        MainUI UI = new MainUI();
+    public static void main(String[] args) {
         LocationManager location = new LocationManager();
         TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager();
+        TicketBooking booking = new TicketBooking() ;
 
-        System.out.println("---Welcome to Bus Tikka---");
-        UI.loginProcess();
-        int inputNumber = input.nextInt();
 
-        switch (inputNumber) {
-            case 1:
-                System.out.println("this is a test")
-                user.userRegister();
-                break;
-            case 2:
-                user.userLogin();
-                break;
-            default:
-                System.out.println("Invalid Input");
-
+        UIManager.showSystemArt();
+        UIManager.showLoginProcess();
+        try {
+            int inputNumber = input.nextInt();
+            switch (inputNumber) {
+                case 1:
+                    user.userRegister();
+                    user.userLogin();
+                    break;
+                case 2:
+                    user.userLogin();
+                    break;
+                case 0:
+                    System.out.println("Have a Nice Day!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid Input!");
+                    System.exit(0);
+            }
+        }catch (InputMismatchException e){
+            System.out.println("invalid Input!");
+            System.exit(0);
         }
 
-        UI.showMainMenu();
-        int inputMenuNumber = input.nextInt();
 
+
+        UIManager.showMainMenu();
+        int inputMenuNumber = input.nextInt();
         switch (inputMenuNumber) {
             case 1:
-                String[] fetchData = location.getTravelDistanceTime().split(",");
-                double costIntoDouble = Double.parseDouble(fetchData[4]);
-                storage.travelDataInsert(fetchData[0], fetchData[1], fetchData[2], fetchData[3], costIntoDouble);
+                storage.travelDataInsert();
                 break;
             case 2:
                 generateTicket.generateQR();
-
                 break;
             case 3:
                 storage.connectionSetup();
@@ -51,24 +59,6 @@ public class MainUI {
                 break;
             default:
                 System.out.println("Invalid Input");
-
         }
-
-
-    }
-
-    private void showMainMenu() {
-        System.out.println("---Select Option---");
-        System.out.println("        1) Calculate Distance");
-        System.out.println("        2) Calculate Bus Ticket");
-        System.out.println("        3) Book a Ticket");
-        System.out.println("        4) Search a Ticket");
-        System.out.println("        5) Cancel a Ticket");
-        System.out.println("        6) Quit");
-    }
-
-    private void loginProcess() {
-        System.out.println("1) Register");
-        System.out.println("2) Login");
     }
 }
