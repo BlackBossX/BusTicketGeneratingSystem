@@ -1,51 +1,10 @@
 import java.util.Scanner;
 
-public class TicketBooking extends StorageManager {
+public class TicketBooking {
     private final int TOTAL_SEATS = 50;
     private boolean[] seats = new boolean[TOTAL_SEATS]; // false indicates the seat is available
     private Scanner input = new Scanner(System.in);
 
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
     public void bookTicket() {
         LocationManager locationManager = new LocationManager();
         StorageManager storageManager = new StorageManager();
@@ -97,7 +56,7 @@ public class TicketBooking extends StorageManager {
         System.out.println("Total Cost: Rs. " + (travelCost * seatsToBook));
 
         // Step 5: Save travel details (optional)
-      //  storageManager.travelDataInsert(startingLocation, endingLocation, travelDetails[2], travelDetails[3], travelCost * seatsToBook);
+        storageManager.travelDataInsert(startingLocation, endingLocation, travelDetails[2], travelDetails[3], travelCost * seatsToBook);
     }
 
     private void displayAvailableSeats() {
@@ -117,4 +76,5 @@ public class TicketBooking extends StorageManager {
         }
         return count;
     }
-}*/
+}
+
