@@ -56,7 +56,7 @@ public class TicketBooking {
         System.out.println("Total Cost: Rs. " + (travelCost * seatsToBook));
 
         // Step 5: Save travel details (optional)
-        storageManager.travelDataInsert(startingLocation, endingLocation, travelDetails[2], travelDetails[3], travelCost * seatsToBook);
+       // storageManager.travelDataInsert(startingLocation, endingLocation, travelDetails[2], travelDetails[3], travelCost * seatsToBook);
     }
 
     private void displayAvailableSeats() {
