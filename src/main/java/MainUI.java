@@ -21,7 +21,7 @@ public class MainUI {
                     user.userLogin();
                     break;
                 case 2:
-                    user.userLogin();
+                   // user.userLogin();
                     break;
                 case 0:
                     System.out.println("Have a Nice Day!");
@@ -37,7 +37,6 @@ public class MainUI {
         }
 
 
-
         UIManager.showMainMenu();
         int inputMenuNumber = input.nextInt();
         switch (inputMenuNumber) {
@@ -48,7 +47,7 @@ public class MainUI {
                 generateTicket.generateQR();
                 break;
             case 3:
-                storage.connectionSetup();
+                booking.bookTicket();
                 break;
             case 4:
                 break;

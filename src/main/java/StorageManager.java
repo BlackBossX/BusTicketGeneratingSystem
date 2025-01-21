@@ -39,6 +39,10 @@ public class StorageManager{
             statement.setDouble(5, storage.getTotalCost());
 
             statement.executeUpdate();
+            System.out.println(storage.getStartingLocation() + " -> " + storage.getEndingLocation());
+            System.out.println("Distance: " + storage.getDistance());
+            System.out.println("Duration: " + storage.getDuration());
+            System.out.printf("Travel Cost: RS.%.2f\n", storage.getTotalCost());
             System.out.println("Data inserted successfully!");
         } catch (SQLException e) {
             System.out.println("Oops Something Wrong!");
@@ -65,6 +69,17 @@ public class StorageManager{
         }
     }
 
+    public void ticketBooking(String user_name,String start_location,String end_location,String distance,String duration){
+        String sql = "INSERT INTO Tickets (name, email, password, phone) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+
+        }catch (Exception e){
+            System.out.println("Oops Something Wrong!");
+        }
+    }
 
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
@@ -97,5 +112,4 @@ public class StorageManager{
         }
         return savedPass + " " + savedName;
     }
-
 }
