@@ -38,7 +38,7 @@ public class TicketBooking {
 
         double totalTicketCost = (fullTickets * travelCost) + halfTickets * (travelCost / 2);
 
-        storageManager.ticketBooking();
+        storageManager.ticketBooking(StorageManager.getPassFromTable(UserManager.getUserName()).split(" ")[1],startingLocation,endingLocation,distance,duration,totalTicketCost);
 
 
 

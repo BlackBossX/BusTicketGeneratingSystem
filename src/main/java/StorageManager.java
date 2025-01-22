@@ -10,10 +10,10 @@ public class StorageManager{
     private final static String password = dotenv.get("DB_PASSWORD");
     private static String savedPass;
     private static String savedName;
-    private final LocationManager storage;
+    private final LocationManager locationManager;
 
     public StorageManager(){
-        storage = new LocationManager();
+        locationManager = new LocationManager();
     }   //composition
 
     public void connectionSetup() {
@@ -26,17 +26,17 @@ public class StorageManager{
     }
 
     public void travelDataInsert() {
-        storage.getTravelDistanceTime();
+        locationManager.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, storage.getStartingLocation());
-            statement.setString(2, storage.getEndingLocation());
-            statement.setString(3, storage.getDistance());
-            statement.setString(4, storage.getDuration());
-            statement.setDouble(5, storage.getTotalCost());
+            statement.setString(1, locationManager.getStartingLocation());
+            statement.setString(2, locationManager.getEndingLocation());
+            statement.setString(3, locationManager.getDistance());
+            statement.setString(4, locationManager.getDuration());
+            statement.setDouble(5, locationManager.getTotalCost());
 
             statement.executeUpdate();
             System.out.println("Data inserted successfully!");
@@ -65,26 +65,25 @@ public class StorageManager{
         }
     }
 
-    public void ticketBooking(){
-       // storage.getTravelDistanceTime();
-        String sql = "INSERT INTO Tickets (user_name, start_location, end_location,distance,duration,total_fare) VALUES (?, ?, ?, ?,?,?)";
+    public void ticketBooking(String userName,String startingLocation, String endingLocation, String distance, String duration, double totalFare){
+        System.out.println("");
+        String sql = "INSERT INTO Tickets (user_name, start_location, end_location, distance, duration, total_fare) VALUES (?,?,?,?,?,?);";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, storage.getStartingLocation());
-            statement.setString(2, storage.getEndingLocation());
-            statement.setString(3, storage.getDistance());
-            statement.setString(4, storage.getDuration());
-            statement.setDouble(5, storage.getTotalCost());
-            statement.setString(6, StorageManager.getPassFromTable(UserManager.getUserName()));
-
+            statement.setString(1, userName);
+            statement.setString(2, startingLocation);
+            statement.setString(3, endingLocation);
+            statement.setString(4, distance);
+            statement.setString(5, duration);
+            statement.setDouble(6, totalFare);
 
             statement.executeUpdate();
             System.out.println("done");
 
         }catch (Exception e){
-            System.out.println("Oops Something Wrong!");
+            System.out.println(e);
         }
     }
 
