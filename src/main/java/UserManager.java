@@ -77,7 +77,7 @@ public class UserManager {
         }
     }
 
-    public String getUserName() {
+    public static String getUserName() {
         return returnedName;
     }
 

@@ -39,10 +39,6 @@ public class StorageManager{
             statement.setDouble(5, storage.getTotalCost());
 
             statement.executeUpdate();
-            System.out.println(storage.getStartingLocation() + " -> " + storage.getEndingLocation());
-            System.out.println("Distance: " + storage.getDistance());
-            System.out.println("Duration: " + storage.getDuration());
-            System.out.printf("Travel Cost: RS.%.2f\n", storage.getTotalCost());
             System.out.println("Data inserted successfully!");
         } catch (SQLException e) {
             System.out.println("Oops Something Wrong!");
@@ -69,12 +65,23 @@ public class StorageManager{
         }
     }
 
-    public void ticketBooking(String user_name,String start_location,String end_location,String distance,String duration){
-        String sql = "INSERT INTO Tickets (name, email, password, phone) VALUES (?, ?, ?, ?)";
+    public void ticketBooking(){
+       // storage.getTravelDistanceTime();
+        String sql = "INSERT INTO Tickets (user_name, start_location, end_location,distance,duration,total_fare) VALUES (?, ?, ?, ?,?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
+            statement.setString(1, storage.getStartingLocation());
+            statement.setString(2, storage.getEndingLocation());
+            statement.setString(3, storage.getDistance());
+            statement.setString(4, storage.getDuration());
+            statement.setDouble(5, storage.getTotalCost());
+            statement.setString(6, StorageManager.getPassFromTable(UserManager.getUserName()));
+
+
+            statement.executeUpdate();
+            System.out.println("done");
 
         }catch (Exception e){
             System.out.println("Oops Something Wrong!");
@@ -93,7 +100,7 @@ public class StorageManager{
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
-    public String getPassFromTable(String email) {
+    public static String getPassFromTable(String email) {
         String sql = "SELECT password,name from Users where email=?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);

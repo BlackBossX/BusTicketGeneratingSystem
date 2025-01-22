@@ -25,12 +25,6 @@ public class TicketGenerator {
             String encodedURL = encodeURL(user.getUserName(), ticketID,
                     splitLocation[0], splitLocation[1], splitLocation[2], splitLocation[3]);
             String URL = QR_API_URL + encodedURL + QR_SIZE;
-
-            System.out.println(locInfo.getStartingLocation() + " -> " + locInfo.getEndingLocation());
-            System.out.println("Distance: " + locInfo.getDistance());
-            System.out.println("Duration: " + locInfo.getDuration());
-            System.out.printf("Travel Cost: RS.%.2f\n", locInfo.getTotalCost());
-
             System.out.println("Your Ticket QR code here: " + URL);
         } catch (Exception e) {
             System.out.println("Can't Generate QR!");
