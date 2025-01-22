@@ -21,12 +21,6 @@ public class TicketBooking {
         String distance = travelDetails[2];
         String duration = travelDetails[3];
 
-
-        System.out.println("\n"+startingLocation + " -> " + endingLocation);
-        System.out.println("Distance: " + distance);
-        System.out.println("Duration: " + duration);
-        System.out.printf("Travel Cost: RS.%.2f\n", travelCost);
-
       //  displayAvailableSeats();
         System.out.print("\nEnter the number of seats you want to book: ");
         int seatsToBook = input.nextInt();
@@ -44,7 +38,7 @@ public class TicketBooking {
 
         double totalTicketCost = (fullTickets * travelCost) + halfTickets * (travelCost / 2);
 
-
+        storageManager.ticketBooking();
 
 
 

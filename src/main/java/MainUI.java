@@ -21,7 +21,7 @@ public class MainUI {
                     user.userLogin();
                     break;
                 case 2:
-                   // user.userLogin();
+                    user.userLogin();
                     break;
                 case 0:
                     System.out.println("Have a Nice Day!");

@@ -57,10 +57,10 @@ public class LocationManager {
                 tCost = 35.00 + (numericalDistance * AVG_COST_PER_KM);
             }
 
-/*            System.out.println(startingLocation + " -> " + endingLocation);
+            System.out.println("\n"+startingLocation + " -> " + endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
-            System.out.printf("Travel Cost: RS.%.2f\n", tCost);*/
+            System.out.printf("Travel Cost: RS.%.2f\n", tCost);
 
             return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
         } catch (Exception e) {
