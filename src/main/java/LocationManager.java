@@ -1,91 +1,101 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Scanner;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager {
-    private String startingLocation;
-    private String endingLocation;
-    private String duration;
-    private String distance;
-    private double tCost;
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String API_KEY = dotenv.get("GOOGLE_MAPS_API_KEY");
+    private final Scanner scanner = new Scanner(System.in);
 
-    private static final double AVG_COST_PER_KM = 3.093;
-    private static final String API_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
-
-    private final Scanner input = new Scanner(System.in);   //encapsulation
-    Dotenv dotenv = Dotenv.load();
-
-    public void gettingLocations() {
-        System.out.print("Enter Starting Location: ");
-        startingLocation = input.nextLine();
-        System.out.print("Enter Ending Location: ");
-        endingLocation = input.nextLine();
-    }
-
+    /**
+     * Fetch travel details using Google Maps Distance Matrix API.
+     * @return String containing starting location, ending location, distance, duration, and cost.
+     */
     public String getTravelDistanceTime() {
         try {
-            HttpClient client = HttpClient.newHttpClient();
-            String apiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
-            gettingLocations();
-            String sLoc = TicketGenerator.encodeURL(startingLocation);
-            String eLoc = TicketGenerator.encodeURL(endingLocation);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(API_URL + "origins=" + sLoc + "&" +
-                            "destinations=" + eLoc + "&" + "key=" + apiKey))
-                    .GET()
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            JSONObject jsonObject = new JSONObject(response.body());
-            //System.out.println("Response Body: " + response.body());
+            System.out.print("Enter Starting Location: ");
+            String startingLocation = scanner.nextLine();
 
-            // starting with [] mean its JSONArray and starting with {} mean its JSONObject
-            JSONArray rowsArray = jsonObject.getJSONArray("rows");
-            JSONObject elements0 = rowsArray.getJSONObject(0).getJSONArray("elements").getJSONObject(0);
-            distance = elements0.getJSONObject("distance").getString("text");
-            duration = elements0.getJSONObject("duration").getString("text");
+            System.out.print("Enter Destination Location: ");
+            String destinationLocation = scanner.nextLine();
 
-            double numericalDistance = Double.parseDouble(distance.split(" ")[0]);
-            if (numericalDistance < 3) {
-                tCost = 27.00 + (numericalDistance * AVG_COST_PER_KM);
-            } else {
-                tCost = 35.00 + (numericalDistance * AVG_COST_PER_KM);
+            // Validate inputs
+            if (startingLocation.isEmpty() || destinationLocation.isEmpty()) {
+                System.out.println("Invalid input. Both locations must be provided.");
+                return getTravelDistanceTime();
             }
 
-            System.out.println(startingLocation + " -> " + endingLocation);
-            System.out.println("Distance: " + distance);
-            System.out.println("Duration: " + duration);
-            System.out.printf("Travel Cost: RS.%.2f\n", tCost);
+            String encodedStartingLocation = encodeValue(startingLocation);
+            String encodedDestinationLocation = encodeValue(destinationLocation);
 
-            return startingLocation + "," + endingLocation + "," + distance + "," + duration + "," + tCost;
+            // Build the URL for the API call
+            String apiUrl = String.format(
+                    "https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s&destinations=%s&key=%s",
+                    encodedStartingLocation, encodedDestinationLocation, API_KEY
+            );
+
+            // Send API request
+            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 200) {
+                System.out.println("Failed to fetch data from Google Maps API. Response Code: " + responseCode);
+                return "null";
+            }
+
+            // Read response
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Parse JSON response
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            JSONArray rows = jsonResponse.getJSONArray("rows");
+            if (rows.isEmpty()) {
+                System.out.println("No data found for the given locations. Please try again.");
+                return getTravelDistanceTime();
+            }
+
+            JSONObject elements = rows.getJSONObject(0).getJSONArray("elements").getJSONObject(0);
+
+            // Extract distance and duration
+            String distance = elements.getJSONObject("distance").getString("text");
+            String duration = elements.getJSONObject("duration").getString("text");
+
+            // Calculate cost (example: Rs. 10 per km)
+            double distanceInKm = Double.parseDouble(distance.split(" ")[0]);
+            double travelCost = distanceInKm * 10;
+
+            // Return formatted travel details
+            return String.format("%s,%s,%s,%s,%.2f", startingLocation, destinationLocation, distance, duration, travelCost);
+
         } catch (Exception e) {
-            System.out.println("Type Locations Correctly!");
+            System.out.println("Error fetching travel details: " + e.getMessage());
+            return "null";
         }
-        return "";
     }
 
-    public String getStartingLocation() {
-        return startingLocation;
-    }
-
-    public String getEndingLocation() {
-        return endingLocation;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public double getTotalCost() {
-        return tCost;
+    /**
+     * Encode a value for use in a URL query parameter.
+     * @param value The string to encode.
+     * @return The encoded string.
+     */
+    private String encodeValue(String value) {
+        try {
+            return java.net.URLEncoder.encode(value, "UTF-8");
+        } catch (Exception e) {
+            return value;
+        }
     }
 }
