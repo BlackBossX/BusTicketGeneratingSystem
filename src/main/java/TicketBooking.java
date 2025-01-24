@@ -48,12 +48,14 @@ public class TicketBooking {
             System.out.println("Enter Y or N");
             checkout = input.next();
         }
-
         String userName = UserManager.getUserName();
+        String TravelInformation = userName +"-"+startingLocation+"-"+endingLocation
+                +"-"+distance+"-"+duration+"-"+totalTicketCost+"-"+seatsToBook;
+
         switch (checkout){
             case "Y":
-                storageManager.ticketSaving(userName,startingLocation,endingLocation,distance,duration,totalTicketCost);
-                generateTicket.generateQR(userName,startingLocation,endingLocation,distance,duration,totalTicketCost);
+                storageManager.ticketSaving(TravelInformation);
+                generateTicket.generateQR(TravelInformation);
                 System.out.print("Thank You for using our Ticket Booking System!\n\n");
                 break;
             case "N":

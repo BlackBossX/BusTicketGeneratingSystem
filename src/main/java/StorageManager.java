@@ -66,8 +66,16 @@ public class StorageManager{
         }
     }
 
-    public void ticketSaving(String userName,String startingLocation, String endingLocation, String distance, String duration, double totalFare){
+    public void ticketSaving(String travelInfo){
         System.out.println("");
+        String seperatedTravelInfo[] = travelInfo.split("-");
+        String userName = seperatedTravelInfo[0];
+        String startingLocation = seperatedTravelInfo[1];
+        String endingLocation = seperatedTravelInfo[2];
+        String distance = seperatedTravelInfo[3];
+        String duration = seperatedTravelInfo[4];
+        double totalFare = Double.parseDouble(seperatedTravelInfo[5]);
+
         String sql = "INSERT INTO Tickets (user_name, start_location, end_location, distance, duration, total_fare) VALUES (?,?,?,?,?,?);";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
