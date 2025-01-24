@@ -2,11 +2,13 @@ public class TicketBooking extends Manager {
     private final LocationManager locationManager;
     private final StorageManager storageManager;
     private final TicketGenerator generateTicket;
+    private final UserManager userManager;
 
-    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket) {
+    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket, UserManager userManager) {
         this.locationManager = locationManager;
         this.storageManager = storageManager;
         this.generateTicket = generateTicket;
+        this.userManager = userManager;
     }
 
     public void bookTicket() {
@@ -53,8 +55,11 @@ public class TicketBooking extends Manager {
 
         switch (checkout) {
             case "Y":
+                String ticketID = storageManager.getTicketID(userName);
+                String userID = storageManager.getPassFromTable(userManager.getEmail()).split(" ")[2];
                 storageManager.ticketSaving(TravelInformation);
                 generateTicket.generateQR(TravelInformation);
+                storageManager.updateSeatsTable(ticketID,userID,1);
                 System.out.print("Thank You for using our Ticket Booking System!\n\n");
                 break;
             case "N":

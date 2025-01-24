@@ -13,7 +13,7 @@ public class MainUI {
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager(storage);
         TicketGenerator generateTicket = new TicketGenerator(location, user, storage);
-        TicketBooking booking = new TicketBooking(location, storage, generateTicket);
+        TicketBooking booking = new TicketBooking(location, storage, generateTicket,user);
 
 
         UIManager.showSystemArt();
@@ -33,6 +33,7 @@ public class MainUI {
                 user.userLogin();
                 break;
             case 0:
+                System.out.println("Quitting...");
                 System.out.println("Have a Nice Day!");
                 System.exit(0);
                 break;
@@ -53,19 +54,17 @@ public class MainUI {
                 location.getTravelDistanceTime();
                 break;
             case 2:
-                // Implement the logic for calculating bus ticket
-                break;
-            case 3:
                 booking.bookTicket();
                 break;
-            case 4:
+            case 3:
                 // Implement the logic for searching a ticket
                 break;
-            case 5:
+            case 4:
                 // Implement the logic for canceling a ticket
                 break;
             case 0:
                 System.out.println("Quitting...");
+                System.out.println("Have a Nice Day!");
                 System.exit(0);
                 break;
             default:
