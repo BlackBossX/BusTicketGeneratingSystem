@@ -2,63 +2,76 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainUI {
+    private int inputNumber = 0;
+    private int inputMenuNumber = 0;
+
     public static void main(String[] args) {
-        LocationManager location = new LocationManager();
-        TicketGenerator generateTicket = new TicketGenerator();
+        int inputNumber = 0;
+        int inputMenuNumber = 0;
         Scanner input = new Scanner(System.in);
+        LocationManager location = new LocationManager();
         StorageManager storage = new StorageManager();
-        UserManager user = new UserManager();
-        TicketBooking booking = new TicketBooking() ;
+        UserManager user = new UserManager(storage);
+        TicketGenerator generateTicket = new TicketGenerator(location, user, storage);
+        TicketBooking booking = new TicketBooking(location, storage, generateTicket);
 
 
         UIManager.showSystemArt();
         UIManager.showLoginProcess();
         try {
-            int inputNumber = input.nextInt();
-            switch (inputNumber) {
-                case 1:
-                    user.userRegister();
-                    user.userLogin();
-                    break;
-                case 2:
-                    user.userLogin();
-                    break;
-                case 0:
-                    System.out.println("Have a Nice Day!");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid Input!");
-                    System.exit(0);
-            }
-        }catch (InputMismatchException e){
-            System.out.println("invalid Input!");
+            inputNumber = input.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid Input!");
             System.exit(0);
         }
-
-
-
-        UIManager.showMainMenu();
-        int inputMenuNumber = input.nextInt();
-        switch (inputMenuNumber) {
+        switch (inputNumber) {
             case 1:
-                storage.travelDataInsert();
+                user.userRegister();
+                user.userLogin();
                 break;
             case 2:
-                generateTicket.generateQR();
+                user.userLogin();
                 break;
-            case 3:
-                storage.connectionSetup();
+            case 0:
+                System.out.println("Have a Nice Day!");
+                System.exit(0);
                 break;
-            case 4:
-                break;
-            case 5:
+            default:
+                System.out.println("Invalid Input!");
+                System.exit(0);
+        }
+
+        UIManager.showMainMenu();
+        try {
+            inputMenuNumber = input.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid Input!");
+            System.exit(0);
+        }
+        switch (inputMenuNumber) {
+            case 1:
                 location.getTravelDistanceTime();
                 break;
-            case 6:
+            case 2:
+                // Implement the logic for calculating bus ticket
+                break;
+            case 3:
+                booking.bookTicket();
+                break;
+            case 4:
+                // Implement the logic for searching a ticket
+                break;
+            case 5:
+                // Implement the logic for canceling a ticket
+                break;
+            case 0:
+                System.out.println("Quitting...");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid Input");
+                System.exit(0);
         }
     }
+
 }

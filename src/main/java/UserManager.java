@@ -1,25 +1,16 @@
-import java.util.Scanner;
-
-public class UserManager {
+public class UserManager extends Manager implements UserAction {
     private String name;
     private String email;
     private String password;
     private String mobileNo;
     private static String returnedName;
-    private final Scanner input = new Scanner(System.in);
+    private final StorageManager storage;
 
-    StorageManager storage = new StorageManager();
-
-    public UserManager() {
+    public UserManager(StorageManager storage) {
+        this.storage = storage;
     }
 
-    public UserManager(String name, String email, String password, String mobileNo) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.mobileNo = mobileNo;
-    }
-
+    @Override
     public void userRegister() {
         System.out.println("--Register--\n");
         System.out.print("Enter Name: ");
@@ -47,11 +38,10 @@ public class UserManager {
     }
 
     private boolean isValidMobileNumber(String mobileNo) {
-        // Check if the mobile number is exactly 10 digits and contains only numbers
         return mobileNo.matches("\\d{10}");
     }
 
-
+    @Override
     public void userLogin() {
         System.out.println("--Login--\n");
         System.out.print("Enter Email: ");
@@ -77,11 +67,12 @@ public class UserManager {
         }
     }
 
-    public String getUserName() {
+    public static String getUserName() {
         return returnedName;
     }
 
     public String getEmail() {
         return email;
     }
+
 }

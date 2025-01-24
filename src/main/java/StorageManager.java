@@ -1,42 +1,38 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class StorageManager{
-    static Dotenv dotenv = Dotenv.load();
-    private final static String url = dotenv.get("DB_URL");
-    private final static String username = dotenv.get("DB_USERNAME");
-    private final static String password = dotenv.get("DB_PASSWORD");
+public class StorageManager extends Manager {
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String url = dotenv.get("DB_URL");
+    private static final String username = dotenv.get("DB_USERNAME");
+    private static final String password = dotenv.get("DB_PASSWORD");
     private static String savedPass;
     private static String savedName;
-    private final LocationManager storage;
+    private static String savedTicketID;
 
-    public StorageManager(){
-        storage = new LocationManager();
-    }   //composition
-
-    public void connectionSetup() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Connected to the database!");
-        } catch (SQLException e) {
-            System.out.println("Failed to connect to the database!");
-            e.printStackTrace();
-        }
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, username, password);
     }
 
-    public void travelDataInsert() {
-        storage.getTravelDistanceTime();
+    public void travelDataInsert(LocationManager locationManager) {
+        locationManager.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, storage.getStartingLocation());
-            statement.setString(2, storage.getEndingLocation());
-            statement.setString(3, storage.getDistance());
-            statement.setString(4, storage.getDuration());
-            statement.setDouble(5, storage.getTotalCost());
+            statement.setString(1, locationManager.getStartingLocation());
+            statement.setString(2, locationManager.getEndingLocation());
+            statement.setString(3, locationManager.getDistance());
+            statement.setString(4, locationManager.getDuration());
+            statement.setDouble(5, locationManager.getTotalCost());
 
             statement.executeUpdate();
             System.out.println("Data inserted successfully!");
@@ -49,7 +45,7 @@ public class StorageManager{
     public void userDataInsert(String name, String email, String pass, String mobileNo) {
         String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, name);
@@ -65,23 +61,51 @@ public class StorageManager{
         }
     }
 
+    public void ticketSaving(String travelInfo) {
+        String[] seperatedTravelInfo = travelInfo.split("-");
+        String userName = seperatedTravelInfo[0];
+        String startingLocation = seperatedTravelInfo[1];
+        String endingLocation = seperatedTravelInfo[2];
+        String distance = seperatedTravelInfo[3];
+        String duration = seperatedTravelInfo[4];
+        double totalFare = Double.parseDouble(seperatedTravelInfo[5]);
+
+        String sql = "INSERT INTO Tickets (user_name, start_location, end_location, distance, duration, total_fare) VALUES (?,?,?,?,?,?);";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, userName);
+            statement.setString(2, startingLocation);
+            statement.setString(3, endingLocation);
+            statement.setString(4, distance);
+            statement.setString(5, duration);
+            statement.setDouble(6, totalFare);
+
+            statement.executeUpdate();
+            System.out.println("Thank you! Enjoy the journey!");
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
 
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
-    // Hash the password this make 60 characters hash , so I made password column size for 60 as well
     public String hashPassword(String plainPassword) {
         return bcrypt.encode(plainPassword);
     }
 
-    // verify the password
     public boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
+
     public String getPassFromTable(String email) {
         String sql = "SELECT password,name from Users where email=?";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);
@@ -98,4 +122,23 @@ public class StorageManager{
         return savedPass + " " + savedName;
     }
 
+    public String getTicketID(String name) {
+        String sql = "SELECT ticket_id from Tickets where user_name=?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                savedTicketID = rs.getString(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Something Wrong!");
+            e.printStackTrace();
+        }
+        return savedTicketID;
+    }
 }

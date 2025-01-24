@@ -1,56 +1,15 @@
-import java.util.Scanner;
+public class TicketBooking extends Manager {
+    private final LocationManager locationManager;
+    private final StorageManager storageManager;
+    private final TicketGenerator generateTicket;
 
-public class TicketBooking extends StorageManager {
-    private final int TOTAL_SEATS = 50;
-    private boolean[] seats = new boolean[TOTAL_SEATS]; // false indicates the seat is available
-    private Scanner input = new Scanner(System.in);
+    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket) {
+        this.locationManager = locationManager;
+        this.storageManager = storageManager;
+        this.generateTicket = generateTicket;
+    }
 
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
     public void bookTicket() {
-        LocationManager locationManager = new LocationManager();
-        StorageManager storageManager = new StorageManager();
-
-        // Step 1: Get travel details
         String[] travelDetails = locationManager.getTravelDistanceTime().split(",");
         if (travelDetails.length < 5) {
             System.out.println("Unable to fetch travel details. Please try again.");
@@ -60,61 +19,47 @@ public class TicketBooking extends StorageManager {
         String startingLocation = travelDetails[0];
         String endingLocation = travelDetails[1];
         double travelCost = Double.parseDouble(travelDetails[4]);
+        String distance = travelDetails[2];
+        String duration = travelDetails[3];
 
-        // Step 2: Display available seats
-        displayAvailableSeats();
-
-        // Step 3: Ask the user to book seats
-        System.out.print("Enter the number of seats you want to book: ");
+        System.out.print("\nEnter the number of seats you want to book: ");
         int seatsToBook = input.nextInt();
 
-        if (seatsToBook <= 0 || seatsToBook > availableSeatCount()) {
-            System.out.println("Invalid number of seats. Please try again.");
-            return;
-        }
+        System.out.print("How many Full Tickets you want to book? (Default: 1)  : ");
+        int fullTickets = input.nextInt();
 
-        System.out.println("Enter the seat numbers you want to book (1-50):");
-        for (int i = 0; i < seatsToBook; i++) {
-            int seatNumber = input.nextInt();
-            if (seatNumber < 1 || seatNumber > TOTAL_SEATS || seats[seatNumber - 1]) {
-                System.out.println("Invalid or already booked seat number: " + seatNumber);
-                i--; // Repeat this iteration
-            } else {
-                seats[seatNumber - 1] = true;
-            }
-        }
+        System.out.print("How many Half Tickets you want to book? (Default: 0)  : ");
+        int halfTickets = input.nextInt();
 
-        // Step 4: Display booking details
-        System.out.println("Booking Summary:");
+        double totalTicketCost = (fullTickets * travelCost) + halfTickets * (travelCost / 2);
+
+        String checkout;
+        System.out.println("\n-----Booking Summary-----");
         System.out.println("From: " + startingLocation);
         System.out.println("To: " + endingLocation);
-        System.out.print("Booked Seats: ");
-        for (int i = 0; i < TOTAL_SEATS; i++) {
-            if (seats[i]) {
-                System.out.print((i + 1) + " ");
-            }
-        }
-        System.out.println("Total Cost: Rs. " + (travelCost * seatsToBook));
+        System.out.println("Booked Seats: " + seatsToBook);
+        System.out.println("Total Cost: Rs. " + totalTicketCost);
 
-        // Step 5: Save travel details (optional)
-      //  storageManager.travelDataInsert(startingLocation, endingLocation, travelDetails[2], travelDetails[3], travelCost * seatsToBook);
-    }
-
-    private void displayAvailableSeats() {
-        System.out.println("Available Seats:");
-        for (int i = 0; i < TOTAL_SEATS; i++) {
-            if (!seats[i]) {
-                System.out.print((i + 1) + " ");
-            }
+        System.out.println("\nDo you need to Checkout? (Y/N): ");
+        try {
+            checkout = input.next();
+        } catch (Exception e) {
+            System.out.println("Enter Y or N");
+            checkout = input.next();
         }
-        System.out.println();
-    }
+        String userName = UserManager.getUserName();
+        String TravelInformation = userName + "-" + startingLocation + "-" +
+                endingLocation + "-" + distance + "-" + duration + "-" + totalTicketCost + "-" + seatsToBook;
 
-    private int availableSeatCount() {
-        int count = 0;
-        for (boolean seat : seats) {
-            if (!seat) count++;
+        switch (checkout) {
+            case "Y":
+                storageManager.ticketSaving(TravelInformation);
+                generateTicket.generateQR(TravelInformation);
+                System.out.print("Thank You for using our Ticket Booking System!\n\n");
+                break;
+            case "N":
+                System.out.print("Thank You have a nice day!\n\n");
+                break;
         }
-        return count;
     }
-}*/
+}

@@ -1,4 +1,3 @@
-import java.util.Scanner;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -6,10 +5,11 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class LocationManager {
-    private String startingLocation;
+public class LocationManager extends Manager {
+    public String startingLocation;
     private String endingLocation;
     private String duration;
     private String distance;
@@ -18,7 +18,6 @@ public class LocationManager {
     private static final double AVG_COST_PER_KM = 3.093;
     private static final String API_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
 
-    private final Scanner input = new Scanner(System.in);   //encapsulation
     Dotenv dotenv = Dotenv.load();
 
     public void gettingLocations() {
@@ -57,7 +56,7 @@ public class LocationManager {
                 tCost = 35.00 + (numericalDistance * AVG_COST_PER_KM);
             }
 
-            System.out.println(startingLocation + " -> " + endingLocation);
+            System.out.println("\n" + startingLocation + " -> " + endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
             System.out.printf("Travel Cost: RS.%.2f\n", tCost);

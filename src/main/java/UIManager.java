@@ -1,4 +1,5 @@
 public class UIManager {
+
     static void showMainMenu() {
         System.out.println("---Select Option---");
         System.out.println("        1) Calculate Distance");
@@ -6,7 +7,7 @@ public class UIManager {
         System.out.println("        3) Book a Ticket");
         System.out.println("        4) Search a Ticket");
         System.out.println("        5) Cancel a Ticket");
-        System.out.println("        6) Quit");
+        System.out.println("        0) Quit");
     }
 
     static void showLoginProcess() {
