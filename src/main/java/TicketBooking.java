@@ -1,15 +1,19 @@
 import java.util.Scanner;
 
-public class TicketBooking {
+public class TicketBooking extends Manager {
     private final int TOTAL_SEATS = 50;
-    private boolean[] seats = new boolean[TOTAL_SEATS]; // false indicates the seat is available
-    private Scanner input = new Scanner(System.in);
+
+    private final LocationManager locationManager;
+    private final StorageManager storageManager;
+    private final TicketGenerator generateTicket;
+
+    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket, Scanner input) {
+        this.locationManager = locationManager;
+        this.storageManager = storageManager;
+        this.generateTicket = generateTicket;
+    }
 
     public void bookTicket() {
-        LocationManager locationManager = new LocationManager();
-        StorageManager storageManager = new StorageManager();
-        TicketGenerator generateTicket = new TicketGenerator();
-
         String[] travelDetails = locationManager.getTravelDistanceTime().split(",");
         if (travelDetails.length < 5) {
             System.out.println("Unable to fetch travel details. Please try again.");
@@ -34,11 +38,10 @@ public class TicketBooking {
         double totalTicketCost = (fullTickets * travelCost) + halfTickets * (travelCost / 2);
 
         String checkout;
-        // Step 4: Display booking details
         System.out.println("\n-----Booking Summary-----");
         System.out.println("From: " + startingLocation);
         System.out.println("To: " + endingLocation);
-        System.out.println("Booked Seats: "+seatsToBook);
+        System.out.println("Booked Seats: " + seatsToBook);
         System.out.println("Total Cost: Rs. " + totalTicketCost);
 
         System.out.println("\nDo you need to Checkout? (Y/N): ");
@@ -49,10 +52,9 @@ public class TicketBooking {
             checkout = input.next();
         }
         String userName = UserManager.getUserName();
-        String TravelInformation = userName +"-"+startingLocation+"-"+endingLocation
-                +"-"+distance+"-"+duration+"-"+totalTicketCost+"-"+seatsToBook;
+        String TravelInformation = userName + "-" + startingLocation + "-" + endingLocation + "-" + distance + "-" + duration + "-" + totalTicketCost + "-" + seatsToBook;
 
-        switch (checkout){
+        switch (checkout) {
             case "Y":
                 storageManager.ticketSaving(TravelInformation);
                 generateTicket.generateQR(TravelInformation);
@@ -62,8 +64,5 @@ public class TicketBooking {
                 System.out.print("Thank You have a nice day!\n\n");
                 break;
         }
-
-
     }
 }
-

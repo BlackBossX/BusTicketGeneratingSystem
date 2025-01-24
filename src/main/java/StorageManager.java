@@ -1,21 +1,21 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class StorageManager{
-    static Dotenv dotenv = Dotenv.load();
-    private final static String url = dotenv.get("DB_URL");
-    private final static String username = dotenv.get("DB_USERNAME");
-    private final static String password = dotenv.get("DB_PASSWORD");
+public class StorageManager {
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String url = dotenv.get("DB_URL");
+    private static final String username = dotenv.get("DB_USERNAME");
+    private static final String password = dotenv.get("DB_PASSWORD");
     private static String savedPass;
     private static String savedName;
     private static String savedTicketID;
-    private final LocationManager locationManager;
-
-    public StorageManager(){
-        locationManager = new LocationManager();
-    }   //composition
 
     public void connectionSetup() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -26,7 +26,7 @@ public class StorageManager{
         }
     }
 
-    public void travelDataInsert() {
+    public void travelDataInsert(LocationManager locationManager) {
         locationManager.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
@@ -66,9 +66,8 @@ public class StorageManager{
         }
     }
 
-    public void ticketSaving(String travelInfo){
-        System.out.println("");
-        String seperatedTravelInfo[] = travelInfo.split("-");
+    public void ticketSaving(String travelInfo) {
+        String[] seperatedTravelInfo = travelInfo.split("-");
         String userName = seperatedTravelInfo[0];
         String startingLocation = seperatedTravelInfo[1];
         String endingLocation = seperatedTravelInfo[2];
@@ -91,24 +90,22 @@ public class StorageManager{
             statement.executeUpdate();
             System.out.println("Thank you! Enjoy the journey!");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
-    // Hash the password this make 60 characters hash , so I made password column size for 60 as well
     public String hashPassword(String plainPassword) {
         return bcrypt.encode(plainPassword);
     }
 
-    // verify the password
     public boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
-    public static String getPassFromTable(String email) {
+    public String getPassFromTable(String email) {
         String sql = "SELECT password,name from Users where email=?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);

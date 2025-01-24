@@ -3,13 +3,12 @@ import java.util.Scanner;
 
 public class MainUI {
     public static void main(String[] args) {
-        LocationManager location = new LocationManager();
-        TicketGenerator generateTicket = new TicketGenerator();
         Scanner input = new Scanner(System.in);
+        LocationManager location = new LocationManager(input);
         StorageManager storage = new StorageManager();
-        UserManager user = new UserManager();
-        TicketBooking booking = new TicketBooking() ;
-
+        UserManager user = new UserManager(storage, input);
+        TicketGenerator generateTicket = new TicketGenerator(location, user);
+        TicketBooking booking = new TicketBooking(location, storage, generateTicket, input);
 
         UIManager.showSystemArt();
         UIManager.showLoginProcess();
@@ -31,29 +30,32 @@ public class MainUI {
                     System.out.println("Invalid Input!");
                     System.exit(0);
             }
-        }catch (InputMismatchException e){
-            System.out.println("invalid Input!");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid Input!");
             System.exit(0);
         }
-
 
         UIManager.showMainMenu();
         int inputMenuNumber = input.nextInt();
         switch (inputMenuNumber) {
             case 1:
-                storage.travelDataInsert();
+                location.getTravelDistanceTime();
                 break;
             case 2:
+                // Implement the logic for calculating bus ticket
                 break;
             case 3:
                 booking.bookTicket();
                 break;
             case 4:
+                // Implement the logic for searching a ticket
                 break;
             case 5:
-                location.getTravelDistanceTime();
+                // Implement the logic for canceling a ticket
                 break;
             case 6:
+                System.out.println("Quitting...");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid Input");

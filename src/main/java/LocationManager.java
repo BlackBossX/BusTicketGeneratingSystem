@@ -1,11 +1,12 @@
-import java.util.Scanner;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager {
@@ -20,6 +21,9 @@ public class LocationManager {
 
     private final Scanner input = new Scanner(System.in);   //encapsulation
     Dotenv dotenv = Dotenv.load();
+
+    public LocationManager(Scanner input) {
+    }
 
     public void gettingLocations() {
         System.out.print("Enter Starting Location: ");
@@ -57,7 +61,7 @@ public class LocationManager {
                 tCost = 35.00 + (numericalDistance * AVG_COST_PER_KM);
             }
 
-            System.out.println("\n"+startingLocation + " -> " + endingLocation);
+            System.out.println("\n" + startingLocation + " -> " + endingLocation);
             System.out.println("Distance: " + distance);
             System.out.println("Duration: " + duration);
             System.out.printf("Travel Cost: RS.%.2f\n", tCost);

@@ -1,23 +1,15 @@
 import java.util.Scanner;
 
-public class UserManager {
+public class UserManager extends Manager {
     private String name;
     private String email;
     private String password;
     private String mobileNo;
     private static String returnedName;
-    private final Scanner input = new Scanner(System.in);
+    private final StorageManager storage;
 
-    StorageManager storage = new StorageManager();
-
-    public UserManager() {
-    }
-
-    public UserManager(String name, String email, String password, String mobileNo) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.mobileNo = mobileNo;
+    public UserManager(StorageManager storage, Scanner input) {
+        this.storage = storage;
     }
 
     public void userRegister() {
@@ -47,10 +39,8 @@ public class UserManager {
     }
 
     private boolean isValidMobileNumber(String mobileNo) {
-        // Check if the mobile number is exactly 10 digits and contains only numbers
         return mobileNo.matches("\\d{10}");
     }
-
 
     public void userLogin() {
         System.out.println("--Login--\n");
@@ -85,23 +75,23 @@ public class UserManager {
         return email;
     }
 
-    public void editName(String name){
-        this.name=name;
+    public void editName(String name) {
+        this.name = name;
         System.out.println("Name is edited.");
     }
 
-    public void editMobileNo(String mobileNo){
-        this.mobileNo=mobileNo;
+    public void editMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
         System.out.println("Mobile Number is edited.");
     }
 
-    void editEmail(String email){
-        this.email=email;
+    public void editEmail(String email) {
+        this.email = email;
         System.out.println("Email is edited.");
     }
 
-    void editPassWord(String password){
-        this.password=password;
+    public void editPassWord(String password) {
+        this.password = password;
         password = storage.hashPassword(password);
         System.out.println("Password is edited.");
     }
@@ -113,7 +103,6 @@ public class UserManager {
         System.out.println("3. Edit Password");
         System.out.println("4. Edit Mobile Number");
         System.out.print("Choose an option: ");
-
 
         int choice = input.nextInt();
         input.nextLine();
@@ -144,8 +133,4 @@ public class UserManager {
         }
         storage.userDataInsert(name, email, password, mobileNo);
     }
-
 }
-
-
-
