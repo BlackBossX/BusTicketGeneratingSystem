@@ -30,7 +30,7 @@
 
 ## 📊 Database Schema
 
-### Users Table
+## 🧑‍🤝‍🧑Users Table
 ```sql
 CREATE TABLE Users (
     user_id VARCHAR(10) PRIMARY KEY,
@@ -56,7 +56,7 @@ END$$;
 DELIMITER ;
 ```
 
-### Trips Table
+## 🛣️Trips Table
 ```sql
 CREATE TABLE Trips (
     trip_id VARCHAR(10) PRIMARY KEY,
@@ -82,7 +82,7 @@ BEGIN
 END$$;
 DELIMITER ;
 ```
-### Tickets Table
+## 🎟️Tickets Table
 ```sql
 CREATE TABLE Tickets (
     ticket_id VARCHAR(10) PRIMARY KEY,
@@ -99,7 +99,6 @@ CREATE TABLE Tickets (
 **Trigger for Ticket ID Generation:**
 ```sql
 DELIMITER $$
-
 CREATE TRIGGER before_insert_tickets 
 BEFORE INSERT ON Tickets 
 FOR EACH ROW 
@@ -109,9 +108,53 @@ BEGIN
     FROM Tickets;
     SET NEW.ticket_id = CONCAT('T', LPAD(next_id, 4, '0'));
 END$$
-
 DELIMITER ;
 ```
+
+## 💺Seats Table
+```sql
+CREATE TABLE seats (
+    seat_id VARCHAR(10) NOT NULL PRIMARY KEY,
+    ticket_id VARCHAR(10) NOT NULL,
+    user_id VARCHAR(10) NOT NULL,
+    availability TINYINT(1) NOT NULL DEFAULT 1
+);
+```
+**Trigger for Seat ID Generation:**
+```sql
+DELIMITER $$
+CREATE TRIGGER before_insert_seats
+   BEFORE INSERT ON Seats
+   FOR EACH ROW
+BEGIN
+   DECLARE next_id INT;
+   SELECT COALESCE(MAX(CAST(SUBSTRING(seat_id, 2) AS UNSIGNED)), 0) + 1 INTO next_id
+   FROM Seats;
+   SET NEW.seat_id = CONCAT('S', LPAD(next_id, 4, '0'));
+END;
+DELIMITER ;
+```
+**Trigger to Limit the Seat Count to 50:**
+```sql
+DELIMITER $$
+CREATE TRIGGER limit_seats_before_insert
+   BEFORE INSERT ON seats
+   FOR EACH ROW
+BEGIN
+   DECLARE row_count INT;
+
+   -- Count the current number of rows in the table
+   SELECT COUNT(*) INTO row_count FROM seats;
+
+   -- Check if the row count exceeds 50
+   IF row_count >= 50 THEN
+      SIGNAL SQLSTATE '45000'
+         SET MESSAGE_TEXT = 'Cannot add more rows. Maximum seat limit (50) reached.';
+   END IF;
+END;
+DELIMITER ;
+```
+
 ---
 
 ## 🛠️ Technologies Used
