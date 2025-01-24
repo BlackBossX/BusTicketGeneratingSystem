@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager {
-    private String startingLocation;
+    public String startingLocation;
     private String endingLocation;
     private String duration;
     private String distance;

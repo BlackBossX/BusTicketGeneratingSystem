@@ -10,6 +10,7 @@ public class StorageManager{
     private final static String password = dotenv.get("DB_PASSWORD");
     private static String savedPass;
     private static String savedName;
+    private static String savedTicketID;
     private final LocationManager locationManager;
 
     public StorageManager(){
@@ -65,7 +66,7 @@ public class StorageManager{
         }
     }
 
-    public void ticketBooking(String userName,String startingLocation, String endingLocation, String distance, String duration, double totalFare){
+    public void ticketSaving(String userName,String startingLocation, String endingLocation, String distance, String duration, double totalFare){
         System.out.println("");
         String sql = "INSERT INTO Tickets (user_name, start_location, end_location, distance, duration, total_fare) VALUES (?,?,?,?,?,?);";
 
@@ -80,7 +81,7 @@ public class StorageManager{
             statement.setDouble(6, totalFare);
 
             statement.executeUpdate();
-            System.out.println("done");
+            System.out.println("Thank you! Enjoy the journey!");
 
         }catch (Exception e){
             System.out.println(e);
@@ -117,5 +118,25 @@ public class StorageManager{
             e.printStackTrace();
         }
         return savedPass + " " + savedName;
+    }
+
+    public static String getTicketID(String name) {
+        String sql = "SELECT ticket_id from Tickets where user_name=?";
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                savedTicketID = rs.getString(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Something Wrong!");
+            e.printStackTrace();
+        }
+        return savedTicketID;
     }
 }

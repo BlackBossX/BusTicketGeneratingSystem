@@ -17,30 +17,29 @@ public class TicketGenerator {
     }
 
 
-    public void generateQR() {
+    public void generateQR(String userName,String startingLocation, String endingLocation, String distance, String duration, double totalFare) {
         try {
-            String locationData = locInfo.getTravelDistanceTime();
-            String ticketID = "TB10000";
-            String[] splitLocation = locationData.split(",");
-            String encodedURL = encodeURL(user.getUserName(), ticketID,
-                    splitLocation[0], splitLocation[1], splitLocation[2], splitLocation[3]);
+            String ticketID = StorageManager.getTicketID(userName);
+            String encodedURL = encodeURL(userName, ticketID,
+                    startingLocation, endingLocation, distance, duration,totalFare);
             String URL = QR_API_URL + encodedURL + QR_SIZE;
             System.out.println("Your Ticket QR code here: " + URL);
         } catch (Exception e) {
             System.out.println("Can't Generate QR!");
             System.out.println(" ");
-            generateQR();
         }
     }
     // overloading
     public static String encodeURL(String fName, String tID,
                             String startLocation, String endLocation,
-                            String distance, String duration) {
+                            String distance, String duration,double totalFare) {
         String data = "Ticket ID: " + tID + "\n\n" +
                 "Name: " + fName + "\n\n" +
                 "Travel Route: " + startLocation + " -> " + endLocation + "\n" +
                 "Distance: " + distance + "\n" +
-                "Duration: " + duration;
+                "Duration: " + duration + "\n" +
+                "Total Fare: " + totalFare;
+
         return URLEncoder.encode(data, StandardCharsets.UTF_8);
     }
 

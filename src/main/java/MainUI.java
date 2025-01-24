@@ -44,7 +44,6 @@ public class MainUI {
                 storage.travelDataInsert();
                 break;
             case 2:
-                generateTicket.generateQR();
                 break;
             case 3:
                 booking.bookTicket();
