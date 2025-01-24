@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class UserManager extends Manager {
+public class UserManager extends Manager implements UserAction {
     private String name;
     private String email;
     private String password;
@@ -12,6 +12,7 @@ public class UserManager extends Manager {
         this.storage = storage;
     }
 
+    @Override
     public void userRegister() {
         System.out.println("--Register--\n");
         System.out.print("Enter Name: ");
@@ -42,6 +43,7 @@ public class UserManager extends Manager {
         return mobileNo.matches("\\d{10}");
     }
 
+    @Override
     public void userLogin() {
         System.out.println("--Login--\n");
         System.out.print("Enter Email: ");
@@ -75,62 +77,4 @@ public class UserManager extends Manager {
         return email;
     }
 
-    public void editName(String name) {
-        this.name = name;
-        System.out.println("Name is edited.");
-    }
-
-    public void editMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
-        System.out.println("Mobile Number is edited.");
-    }
-
-    public void editEmail(String email) {
-        this.email = email;
-        System.out.println("Email is edited.");
-    }
-
-    public void editPassWord(String password) {
-        this.password = password;
-        password = storage.hashPassword(password);
-        System.out.println("Password is edited.");
-    }
-
-    public void editUserProfile() {
-        System.out.println("-- Edit Profile --");
-        System.out.println("1. Edit Name");
-        System.out.println("2. Edit Email");
-        System.out.println("3. Edit Password");
-        System.out.println("4. Edit Mobile Number");
-        System.out.print("Choose an option: ");
-
-        int choice = input.nextInt();
-        input.nextLine();
-
-        switch (choice) {
-            case 1:
-                System.out.print("Enter your new name: ");
-                String newName = input.nextLine();
-                editName(newName);
-                break;
-            case 2:
-                System.out.print("Enter your new Email: ");
-                String newEmail = input.nextLine();
-                editEmail(newEmail);
-                break;
-            case 3:
-                System.out.print("Enter your new password: ");
-                String currentPassword = input.nextLine();
-                editPassWord(currentPassword);
-                break;
-            case 4:
-                System.out.print("Enter your new mobile number: ");
-                String newMobileNo = input.nextLine();
-                editMobileNo(newMobileNo);
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-        }
-        storage.userDataInsert(name, email, password, mobileNo);
-    }
 }

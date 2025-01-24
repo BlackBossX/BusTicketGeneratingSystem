@@ -17,20 +17,15 @@ public class StorageManager {
     private static String savedName;
     private static String savedTicketID;
 
-    public void connectionSetup() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Connected to the database!");
-        } catch (SQLException e) {
-            System.out.println("Failed to connect to the database!");
-            e.printStackTrace();
-        }
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, username, password);
     }
 
     public void travelDataInsert(LocationManager locationManager) {
         locationManager.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, locationManager.getStartingLocation());
@@ -50,7 +45,7 @@ public class StorageManager {
     public void userDataInsert(String name, String email, String pass, String mobileNo) {
         String sql = "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, name);
@@ -77,7 +72,7 @@ public class StorageManager {
 
         String sql = "INSERT INTO Tickets (user_name, start_location, end_location, distance, duration, total_fare) VALUES (?,?,?,?,?,?);";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, userName);
@@ -95,6 +90,8 @@ public class StorageManager {
         }
     }
 
+
+
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
     public String hashPassword(String plainPassword) {
@@ -105,10 +102,12 @@ public class StorageManager {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
 
+
+
     public String getPassFromTable(String email) {
         String sql = "SELECT password,name from Users where email=?";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, email);
@@ -125,10 +124,10 @@ public class StorageManager {
         return savedPass + " " + savedName;
     }
 
-    public static String getTicketID(String name) {
+    public String getTicketID(String name) {
         String sql = "SELECT ticket_id from Tickets where user_name=?";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, name);

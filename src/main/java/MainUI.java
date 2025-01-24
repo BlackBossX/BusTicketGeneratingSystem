@@ -7,7 +7,7 @@ public class MainUI {
         LocationManager location = new LocationManager(input);
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager(storage, input);
-        TicketGenerator generateTicket = new TicketGenerator(location, user);
+        TicketGenerator generateTicket = new TicketGenerator(location, user,storage);
         TicketBooking booking = new TicketBooking(location, storage, generateTicket, input);
 
         UIManager.showSystemArt();

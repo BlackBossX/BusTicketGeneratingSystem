@@ -11,14 +11,18 @@ public class TicketGenerator {
     private static final String QR_SIZE = "&size=300x300";
     private final LocationManager locInfo;
     private final UserManager user;
+    private final StorageManager storage;
 
-    public TicketGenerator(LocationManager locInfo, UserManager user) {
+    public TicketGenerator(LocationManager locInfo, UserManager user,StorageManager storage) {
         this.locInfo = locInfo;
         this.user = user;
+        this.storage =storage;
     }
 
     public void generateQR(@NotNull String travelInfo) {
+
         String[] seperatedTravelInfo = travelInfo.split("-");
+
         String userName = seperatedTravelInfo[0];
         String startingLocation = seperatedTravelInfo[1];
         String endingLocation = seperatedTravelInfo[2];
@@ -26,8 +30,9 @@ public class TicketGenerator {
         String duration = seperatedTravelInfo[4];
         double totalFare = Double.parseDouble(seperatedTravelInfo[5]);
         String seatsCount = seperatedTravelInfo[6];
+
         try {
-            String ticketID = StorageManager.getTicketID(userName);
+            String ticketID = storage.getTicketID(userName);
             String encodedURL = encodeURL(userName, ticketID,
                     startingLocation, endingLocation, distance, duration, totalFare, seatsCount);
             String URL = QR_API_URL + encodedURL + QR_SIZE;
