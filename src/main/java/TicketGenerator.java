@@ -13,10 +13,10 @@ public class TicketGenerator {
     private final UserManager user;
     private final StorageManager storage;
 
-    public TicketGenerator(LocationManager locInfo, UserManager user,StorageManager storage) {
+    public TicketGenerator(LocationManager locInfo, UserManager user, StorageManager storage) {
         this.locInfo = locInfo;
         this.user = user;
-        this.storage =storage;
+        this.storage = storage;
     }
 
     public void generateQR(@NotNull String travelInfo) {

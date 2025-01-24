@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class UserManager extends Manager implements UserAction {
     private String name;
     private String email;
@@ -8,7 +6,7 @@ public class UserManager extends Manager implements UserAction {
     private static String returnedName;
     private final StorageManager storage;
 
-    public UserManager(StorageManager storage, Scanner input) {
+    public UserManager(StorageManager storage) {
         this.storage = storage;
     }
 

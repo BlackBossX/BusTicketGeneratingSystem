@@ -2,14 +2,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class LocationManager {
+public class LocationManager extends Manager {
     public String startingLocation;
     private String endingLocation;
     private String duration;
@@ -19,11 +18,7 @@ public class LocationManager {
     private static final double AVG_COST_PER_KM = 3.093;
     private static final String API_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
 
-    private final Scanner input = new Scanner(System.in);   //encapsulation
     Dotenv dotenv = Dotenv.load();
-
-    public LocationManager(Scanner input) {
-    }
 
     public void gettingLocations() {
         System.out.print("Enter Starting Location: ");

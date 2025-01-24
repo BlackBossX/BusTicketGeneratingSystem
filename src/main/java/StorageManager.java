@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class StorageManager {
+public class StorageManager extends Manager {
     private static final Dotenv dotenv = Dotenv.load();
     private static final String url = dotenv.get("DB_URL");
     private static final String username = dotenv.get("DB_USERNAME");
@@ -91,7 +91,6 @@ public class StorageManager {
     }
 
 
-
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
     public String hashPassword(String plainPassword) {
@@ -101,7 +100,6 @@ public class StorageManager {
     public boolean verifyPassword(String plainPassword, String hashedPassword) {
         return bcrypt.matches(plainPassword, hashedPassword);
     }
-
 
 
     public String getPassFromTable(String email) {

@@ -1,13 +1,9 @@
-import java.util.Scanner;
-
 public class TicketBooking extends Manager {
-    private final int TOTAL_SEATS = 50;
-
     private final LocationManager locationManager;
     private final StorageManager storageManager;
     private final TicketGenerator generateTicket;
 
-    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket, Scanner input) {
+    public TicketBooking(LocationManager locationManager, StorageManager storageManager, TicketGenerator generateTicket) {
         this.locationManager = locationManager;
         this.storageManager = storageManager;
         this.generateTicket = generateTicket;
@@ -52,7 +48,8 @@ public class TicketBooking extends Manager {
             checkout = input.next();
         }
         String userName = UserManager.getUserName();
-        String TravelInformation = userName + "-" + startingLocation + "-" + endingLocation + "-" + distance + "-" + duration + "-" + totalTicketCost + "-" + seatsToBook;
+        String TravelInformation = userName + "-" + startingLocation + "-" +
+                endingLocation + "-" + distance + "-" + duration + "-" + totalTicketCost + "-" + seatsToBook;
 
         switch (checkout) {
             case "Y":
