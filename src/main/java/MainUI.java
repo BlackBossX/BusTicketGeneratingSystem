@@ -51,15 +51,12 @@ public class MainUI {
         }
         switch (inputMenuNumber) {
             case 1:
-                location.getTravelDistanceTime();
+                storage.travelDataInsert(location);
                 break;
             case 2:
                 booking.bookTicket();
                 break;
             case 3:
-                // Implement the logic for searching a ticket
-                break;
-            case 4:
                 booking.cancelTicket();
                 break;
             case 0:

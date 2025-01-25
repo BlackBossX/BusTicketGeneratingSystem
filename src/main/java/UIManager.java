@@ -4,8 +4,7 @@ public class UIManager {
         System.out.println("---Select Option---");
         System.out.println("        1) Calculate Distance & Ticket Cost");
         System.out.println("        2) Book a Ticket");
-        System.out.println("        3) Search a Ticket");
-        System.out.println("        4) Cancel a Ticket");
+        System.out.println("        3) Cancel a Ticket");
         System.out.println("        0) Quit");
     }
 
