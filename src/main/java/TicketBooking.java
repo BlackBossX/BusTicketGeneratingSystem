@@ -70,7 +70,6 @@ public class TicketBooking extends Manager {
     }
 
     String ticketID;
-
     public void cancelTicket() {
         System.out.print("Enter the Ticket ID to cancel: ");
         try {
@@ -80,6 +79,8 @@ public class TicketBooking extends Manager {
             System.out.println("Enter Y or N");
             ticketID = input.nextLine();
         }
+
+
         storageManager.cancelTicket(ticketID, userManager);
     }
 
