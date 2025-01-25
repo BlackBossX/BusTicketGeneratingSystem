@@ -2,11 +2,9 @@ public class UIManager {
 
     static void showMainMenu() {
         System.out.println("---Select Option---");
-        System.out.println("        1) Calculate Distance");
-        System.out.println("        2) Calculate Bus Ticket");
-        System.out.println("        3) Book a Ticket");
-        System.out.println("        4) Search a Ticket");
-        System.out.println("        5) Cancel a Ticket");
+        System.out.println("        1) Calculate Distance & Ticket Cost");
+        System.out.println("        2) Book a Ticket");
+        System.out.println("        3) Cancel a Ticket");
         System.out.println("        0) Quit");
     }
 
@@ -14,7 +12,7 @@ public class UIManager {
         System.out.println("Please enter respected number");
         System.out.println("1) Register");
         System.out.println("2) Login");
-        System.out.println("0) Exit");
+        System.out.println("0) Quit");
     }
 
     public static void showSystemArt() {

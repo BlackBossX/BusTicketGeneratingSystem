@@ -1,6 +1,6 @@
 public class UserManager extends Manager implements UserAction {
     private String name;
-    private String email;
+    private static String email;
     private String password;
     private String mobileNo;
     private static String returnedName;

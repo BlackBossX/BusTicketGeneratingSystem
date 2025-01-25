@@ -16,10 +16,12 @@ public class StorageManager extends Manager {
     private static String savedPass;
     private static String savedName;
     private static String savedTicketID;
+    private static String savedUserID;
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
+
 
     public void travelDataInsert(LocationManager locationManager) {
         locationManager.getTravelDistanceTime();
@@ -103,7 +105,7 @@ public class StorageManager extends Manager {
 
 
     public String getPassFromTable(String email) {
-        String sql = "SELECT password,name from Users where email=?";
+        String sql = "SELECT password,name,user_id from Users where email=?";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -114,12 +116,13 @@ public class StorageManager extends Manager {
             while (rs.next()) {
                 savedPass = rs.getString(1);
                 savedName = rs.getString(2);
+                savedUserID = rs.getString(3);
             }
         } catch (Exception e) {
             System.out.println("Please Enter Correct Email!");
             e.printStackTrace();
         }
-        return savedPass + " " + savedName;
+        return savedPass + " " + savedName + " " + savedUserID;
     }
 
     public String getTicketID(String name) {
@@ -141,4 +144,58 @@ public class StorageManager extends Manager {
         }
         return savedTicketID;
     }
-}
+
+
+    public void updateSeatsTable(String ticketID, String userID, int seatsToBook) {
+        String sqlInsert = "INSERT INTO seats (ticket_id, user_id) VALUES (?, ?)";
+        String sqlUpdate = "UPDATE seats SET availability = availability - ? WHERE ticket_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement insertStatement = connection.prepareStatement(sqlInsert);
+             PreparedStatement updateStatement = connection.prepareStatement(sqlUpdate)) {
+
+            // Insert ticket_id and user_id into seats table
+            insertStatement.setString(1, ticketID);
+            insertStatement.setString(2, userID);
+            insertStatement.executeUpdate();
+
+            // Update availability in seats table
+            updateStatement.setInt(1, seatsToBook);
+            updateStatement.setString(2, ticketID);
+            updateStatement.executeUpdate();
+
+            System.out.println("Seats table updated successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error updating seats table!");
+            e.printStackTrace();
+        }
+    }
+
+       
+        public void cancelTicket(String ticketID,UserManager userManager) {
+            String userID = getPassFromTable(userManager.getEmail()).split(" ")[2];
+            String sqlDeleteSeats = "DELETE FROM seats WHERE ticket_id = ? AND user_id = ?";
+            String sqlUpdateSeats = "UPDATE seats SET availability = availability + 1 WHERE ticket_id = ?";
+
+            try (Connection connection = getConnection();
+                 PreparedStatement deleteStatement = connection.prepareStatement(sqlDeleteSeats);
+                 PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateSeats)) {
+
+                // Delete the ticket from seats table
+                deleteStatement.setString(1, ticketID);
+                deleteStatement.setString(2, userID);
+                deleteStatement.executeUpdate();
+
+                // Update availability in seats table
+                updateStatement.setString(1, ticketID);
+                updateStatement.executeUpdate();
+
+                System.out.println("Ticket cancelled successfully!");
+            } catch (SQLException e) {
+                System.out.println("Error cancelling ticket!");
+                e.printStackTrace();
+            }
+        }
+
+
+    }

@@ -1053,12 +1053,12 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <column id="302" parent="297" name="ticket_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>int|0s</StoredType>
+      <StoredType>varchar(10)|0s</StoredType>
     </column>
     <column id="303" parent="297" name="user_id">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>int|0s</StoredType>
+      <StoredType>varchar(10)|0s</StoredType>
     </column>
     <column id="304" parent="297" name="availability">
       <DefaultExpression>1</DefaultExpression>
