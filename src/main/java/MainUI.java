@@ -60,14 +60,7 @@ public class MainUI {
                 // Implement the logic for searching a ticket
                 break;
             case 4:
-                System.out.print("Please enter the Ticket ID you want to cancel: ");
-                try {
-                    String cancelTicketNo = input.nextLine();
-                    input.nextLine();
-                    storage.cancelTicket(cancelTicketNo);
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid Input!");
-                }
+                booking.cancelTicket();
                 break;
             case 0:
                 System.out.println("Quitting...");

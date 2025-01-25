@@ -171,9 +171,9 @@ public class StorageManager extends Manager {
         }
     }
 
-    String userID = TicketBooking.getEmail();
-        public void cancelTicket(String ticketID) {
-            System.out.println(userID);
+       
+        public void cancelTicket(String ticketID,UserManager userManager) {
+            String userID = getPassFromTable(userManager.getEmail()).split(" ")[2];
             String sqlDeleteSeats = "DELETE FROM seats WHERE ticket_id = ? AND user_id = ?";
             String sqlUpdateSeats = "UPDATE seats SET availability = availability + 1 WHERE ticket_id = ?";
 

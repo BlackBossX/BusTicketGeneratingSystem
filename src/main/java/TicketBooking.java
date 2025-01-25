@@ -69,7 +69,10 @@ public class TicketBooking extends Manager {
     }
 
 
-    public static String getEmail(){
-        return UserManager.getEmail();
+    public void cancelTicket() {
+        System.out.print("Enter the Ticket ID to cancel: ");
+        String ticketID = input.nextLine();
+
+        storageManager.cancelTicket(ticketID, userManager);
     }
 }

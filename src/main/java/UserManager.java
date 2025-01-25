@@ -71,7 +71,7 @@ public class UserManager extends Manager implements UserAction {
         return returnedName;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
