@@ -154,12 +154,10 @@ public class StorageManager extends Manager {
              PreparedStatement insertStatement = connection.prepareStatement(sqlInsert);
              PreparedStatement updateStatement = connection.prepareStatement(sqlUpdate)) {
 
-            // Insert ticket_id and user_id into seats table
             insertStatement.setString(1, ticketID);
             insertStatement.setString(2, userID);
             insertStatement.executeUpdate();
 
-            // Update availability in seats table
             updateStatement.setInt(1, seatsToBook);
             updateStatement.setString(2, ticketID);
             updateStatement.executeUpdate();
@@ -171,31 +169,28 @@ public class StorageManager extends Manager {
         }
     }
 
-       
-        public void cancelTicket(String ticketID,UserManager userManager) {
-            String userID = getPassFromTable(userManager.getEmail()).split(" ")[2];
-            String sqlDeleteSeats = "DELETE FROM seats WHERE ticket_id = ? AND user_id = ?";
-            String sqlUpdateSeats = "UPDATE seats SET availability = availability + 1 WHERE ticket_id = ?";
 
-            try (Connection connection = getConnection();
-                 PreparedStatement deleteStatement = connection.prepareStatement(sqlDeleteSeats);
-                 PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateSeats)) {
+    public void cancelTicket(String ticketID, UserManager userManager) {
+        String userID = getPassFromTable(userManager.getEmail()).split(" ")[2];
+        String sqlDeleteSeats = "DELETE FROM seats WHERE ticket_id = ? AND user_id = ?";
+        String sqlUpdateSeats = "UPDATE seats SET availability = availability + 1 WHERE ticket_id = ?";
 
-                // Delete the ticket from seats table
-                deleteStatement.setString(1, ticketID);
-                deleteStatement.setString(2, userID);
-                deleteStatement.executeUpdate();
+        try (Connection connection = getConnection();
+             PreparedStatement deleteStatement = connection.prepareStatement(sqlDeleteSeats);
+             PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateSeats)) {
 
-                // Update availability in seats table
-                updateStatement.setString(1, ticketID);
-                updateStatement.executeUpdate();
+            deleteStatement.setString(1, ticketID);
+            deleteStatement.setString(2, userID);
+            deleteStatement.executeUpdate();
 
-                System.out.println("Ticket cancelled successfully!");
-            } catch (SQLException e) {
-                System.out.println("Error cancelling ticket!");
-                e.printStackTrace();
-            }
+            updateStatement.setString(1, ticketID);
+            updateStatement.executeUpdate();
+
+            System.out.println("Ticket cancelled successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error cancelling ticket!");
+            e.printStackTrace();
         }
-
-
     }
+
+}

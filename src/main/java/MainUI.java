@@ -2,9 +2,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainUI {
-    private int inputNumber = 0;
-    private int inputMenuNumber = 0;
-
     public static void main(String[] args) {
         int inputNumber = 0;
         int inputMenuNumber = 0;
@@ -13,8 +10,7 @@ public class MainUI {
         StorageManager storage = new StorageManager();
         UserManager user = new UserManager(storage);
         TicketGenerator generateTicket = new TicketGenerator(location, user, storage);
-        TicketBooking booking = new TicketBooking(location, storage, generateTicket,user);
-
+        TicketBooking booking = new TicketBooking(location, storage, generateTicket, user);
 
         UIManager.showSystemArt();
         UIManager.showLoginProcess();

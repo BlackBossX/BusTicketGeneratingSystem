@@ -26,6 +26,43 @@
     - Built with Maven for dependency management.
     - Organized into clear, reusable components.
 
+
+
+---
+
+## 🛠️ Technologies Used
+
+- **Java**
+- **Maven**
+- **Google Cloud Distance Matrix API**
+- **[goqr.me API](https://goqr.me/api/)**
+- **bcrypt**
+- **MySQL**
+
+---
+
+## ⚙️ Setup Instructions
+
+1. Clone the repository and navigate to the project directory.
+2. Set up a MySQL database and execute the provided schema and triggers.
+3. Configure API keys for:
+    - Google Cloud Distance Matrix API.
+    - [goqr.me API](https://goqr.me/api/).
+
+
+4. Configure the **.env** file 
+    - _**GOOGLE_MAPS_API_KEY**_
+    - _**DB_URL**_
+    - _**DB_USERNAME**_
+    - _**DB_PASSWORD**_
+    - _**QR_API_URL**_ 
+   
+
+5. Build the project with Maven:
+   ```bash
+   mvn clean install
+   ```
+
 ---
 
 ## 📊 Database Schema
@@ -113,7 +150,7 @@ DELIMITER ;
 
 ## 💺Seats Table
 ```sql
-CREATE TABLE seats (
+CREATE TABLE Seats (
     seat_id VARCHAR(10) NOT NULL PRIMARY KEY,
     ticket_id VARCHAR(10) NOT NULL,
     user_id VARCHAR(10) NOT NULL,
@@ -138,13 +175,13 @@ DELIMITER ;
 ```sql
 DELIMITER $$
 CREATE TRIGGER limit_seats_before_insert
-   BEFORE INSERT ON seats
+   BEFORE INSERT ON Seats
    FOR EACH ROW
 BEGIN
    DECLARE row_count INT;
 
    -- Count the current number of rows in the table
-   SELECT COUNT(*) INTO row_count FROM seats;
+   SELECT COUNT(*) INTO row_count FROM Seats;
 
    -- Check if the row count exceeds 50
    IF row_count >= 50 THEN
@@ -154,41 +191,6 @@ BEGIN
 END;
 DELIMITER ;
 ```
-
----
-
-## 🛠️ Technologies Used
-
-- **Java**
-- **Maven**
-- **Google Cloud Distance Matrix API**
-- **[goqr.me API](https://goqr.me/api/)**
-- **bcrypt**
-- **MySQL**
-
----
-
-## ⚙️ Setup Instructions
-
-1. Clone the repository and navigate to the project directory.
-2. Set up a MySQL database and execute the provided schema and triggers.
-3. Configure API keys for:
-    - Google Cloud Distance Matrix API.
-    - [goqr.me API](https://goqr.me/api/).
-
-
-4. Configure the **.env** file 
-    - _**GOOGLE_MAPS_API_KEY**_
-    - _**DB_URL**_
-    - _**DB_USERNAME**_
-    - _**DB_PASSWORD**_
-    - _**QR_API_URL**_ 
-   
-
-5. Build the project with Maven:
-   ```bash
-   mvn clean install
-   ```
 
 
 ---
