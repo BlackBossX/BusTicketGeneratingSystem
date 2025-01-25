@@ -113,7 +113,7 @@ DELIMITER ;
 
 ## 💺Seats Table
 ```sql
-CREATE TABLE seats (
+CREATE TABLE Seats (
     seat_id VARCHAR(10) NOT NULL PRIMARY KEY,
     ticket_id VARCHAR(10) NOT NULL,
     user_id VARCHAR(10) NOT NULL,
@@ -138,13 +138,13 @@ DELIMITER ;
 ```sql
 DELIMITER $$
 CREATE TRIGGER limit_seats_before_insert
-   BEFORE INSERT ON seats
+   BEFORE INSERT ON Seats
    FOR EACH ROW
 BEGIN
    DECLARE row_count INT;
 
    -- Count the current number of rows in the table
-   SELECT COUNT(*) INTO row_count FROM seats;
+   SELECT COUNT(*) INTO row_count FROM Seats;
 
    -- Check if the row count exceeds 50
    IF row_count >= 50 THEN

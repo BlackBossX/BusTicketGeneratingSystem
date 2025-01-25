@@ -60,7 +60,7 @@ public class TicketBooking extends Manager {
                 String ticketID = storageManager.getTicketID(userName);
                 String userID = storageManager.getPassFromTable(userManager.getEmail()).split(" ")[2];
                 generateTicket.generateQR(TravelInformation);
-                storageManager.updateSeatsTable(ticketID,userID,1);
+                storageManager.updateSeatsTable(ticketID, userID, 1);
                 System.out.print("Thank You for using our Ticket Booking System!\n\n");
                 break;
             case "N":
@@ -70,6 +70,7 @@ public class TicketBooking extends Manager {
     }
 
     String ticketID;
+
     public void cancelTicket() {
         System.out.print("Enter the Ticket ID to cancel: ");
         try {
@@ -79,8 +80,7 @@ public class TicketBooking extends Manager {
             System.out.println("Enter Y or N");
             ticketID = input.nextLine();
         }
-
-
         storageManager.cancelTicket(ticketID, userManager);
     }
+
 }
