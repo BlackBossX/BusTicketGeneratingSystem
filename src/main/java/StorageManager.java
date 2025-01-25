@@ -22,6 +22,7 @@ public class StorageManager extends Manager {
         return DriverManager.getConnection(url, username, password);
     }
 
+
     public void travelDataInsert(LocationManager locationManager) {
         locationManager.getTravelDistanceTime();
         String sql = "INSERT INTO trips (start_location, end_location, distance, duration, fare) VALUES (?, ?, ?, ?, ?)";
@@ -169,4 +170,32 @@ public class StorageManager extends Manager {
             e.printStackTrace();
         }
     }
-}
+
+    String userID = TicketBooking.getEmail();
+        public void cancelTicket(String ticketID) {
+            System.out.println(userID);
+            String sqlDeleteSeats = "DELETE FROM seats WHERE ticket_id = ? AND user_id = ?";
+            String sqlUpdateSeats = "UPDATE seats SET availability = availability + 1 WHERE ticket_id = ?";
+
+            try (Connection connection = getConnection();
+                 PreparedStatement deleteStatement = connection.prepareStatement(sqlDeleteSeats);
+                 PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateSeats)) {
+
+                // Delete the ticket from seats table
+                deleteStatement.setString(1, ticketID);
+                deleteStatement.setString(2, userID);
+                deleteStatement.executeUpdate();
+
+                // Update availability in seats table
+                updateStatement.setString(1, ticketID);
+                updateStatement.executeUpdate();
+
+                System.out.println("Ticket cancelled successfully!");
+            } catch (SQLException e) {
+                System.out.println("Error cancelling ticket!");
+                e.printStackTrace();
+            }
+        }
+
+
+    }

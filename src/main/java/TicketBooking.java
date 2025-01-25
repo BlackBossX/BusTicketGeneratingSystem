@@ -55,9 +55,9 @@ public class TicketBooking extends Manager {
 
         switch (checkout) {
             case "Y":
+                storageManager.ticketSaving(TravelInformation);
                 String ticketID = storageManager.getTicketID(userName);
                 String userID = storageManager.getPassFromTable(userManager.getEmail()).split(" ")[2];
-                storageManager.ticketSaving(TravelInformation);
                 generateTicket.generateQR(TravelInformation);
                 storageManager.updateSeatsTable(ticketID,userID,1);
                 System.out.print("Thank You for using our Ticket Booking System!\n\n");
@@ -66,5 +66,10 @@ public class TicketBooking extends Manager {
                 System.out.print("Thank You have a nice day!\n\n");
                 break;
         }
+    }
+
+
+    public static String getEmail(){
+        return UserManager.getEmail();
     }
 }
