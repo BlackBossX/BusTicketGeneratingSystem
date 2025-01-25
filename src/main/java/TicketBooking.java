@@ -46,6 +46,7 @@ public class TicketBooking extends Manager {
         try {
             checkout = input.next();
         } catch (Exception e) {
+            System.out.println("Invalid input. Please try again.");
             System.out.println("Enter Y or N");
             checkout = input.next();
         }
@@ -68,10 +69,17 @@ public class TicketBooking extends Manager {
         }
     }
 
-
+    String ticketID;
     public void cancelTicket() {
         System.out.print("Enter the Ticket ID to cancel: ");
-        String ticketID = input.nextLine();
+        try {
+            ticketID = input.nextLine();
+        } catch (Exception e) {
+            System.out.println("Invalid Ticket ID!");
+            System.out.println("Enter Y or N");
+            ticketID = input.nextLine();
+        }
+
 
         storageManager.cancelTicket(ticketID, userManager);
     }
