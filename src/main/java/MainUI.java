@@ -2,9 +2,10 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainUI {
+    private static int inputNumber = 0;
+    private static int inputMenuNumber = 0;
     public static void main(String[] args) {
-        int inputNumber = 0;
-        int inputMenuNumber = 0;
+
         Scanner input = new Scanner(System.in);
         LocationManager location = new LocationManager();
         StorageManager storage = new StorageManager();

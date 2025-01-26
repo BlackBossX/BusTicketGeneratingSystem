@@ -72,7 +72,7 @@ public class TicketBooking extends Manager {
     String ticketID;
 
     public void cancelTicket() {
-        System.out.print("Enter the Ticket ID to cancel: ");
+        System.out.print("Enter the Ticket ID to cancel (T0010): ");
         try {
             ticketID = input.nextLine();
         } catch (Exception e) {
