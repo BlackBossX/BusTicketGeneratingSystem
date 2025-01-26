@@ -9,16 +9,17 @@ import org.json.JSONObject;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class LocationManager extends Manager {
-    public String startingLocation;
+    private String startingLocation;
     private String endingLocation;
     private String duration;
     private String distance;
     private double tCost;
+    private static final Dotenv dotenv = Dotenv.load();
 
     private static final double AVG_COST_PER_KM = 3.093;
     private static final String API_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
 
-    Dotenv dotenv = Dotenv.load();
+
 
     public void gettingLocations() {
         System.out.print("Enter Starting Location: ");
